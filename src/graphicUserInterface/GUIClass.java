@@ -420,7 +420,11 @@ public class GUIClass {
 		{
 			MOF6809.setBackground(new Color(0xff8d76));
 			MOF6809.setPreferredSize(new Dimension(1365, 786));
-			MOF6809.setIconImage(new ImageIcon("C:\\Users\\Oussama AIT MENDIL\\Desktop\\MicroProjectUI\\Iconn6809.png").getImage());
+			MOF6809.setIconImage(
+				    new ImageIcon(
+				        getClass().getResource("/images/Icon.png")
+				    ).getImage()
+				);
 			Container MOF6809ContentPane = MOF6809.getContentPane();
 			MOF6809ContentPane.setLayout(null);
 
@@ -438,7 +442,12 @@ public class GUIClass {
 				BACKGROUNDPanel.setLayout(null);
 
 				//---- LogoLabel ----
-				LogoLabel.setIcon(new ImageIcon("C:\\Users\\Oussama AIT MENDIL\\Desktop\\MicroProjectUI\\LOGOLabel.png"));
+				LogoLabel.setIcon(
+					    new ImageIcon(
+					        getClass().getResource("/images/Logo.png")
+					    )
+					);
+
 				BACKGROUNDPanel.add(LogoLabel);
 				LogoLabel.setBounds(493, 10, 293, 105);
 
@@ -1055,7 +1064,12 @@ public class GUIClass {
 				INSTRTextField.setBounds(650, 210, 250, 30);
 
 				//---- ALUSymbol ----
-				ALUSymbol.setIcon(new ImageIcon("C:\\Users\\Oussama AIT MENDIL\\Desktop\\MicroProjectUI\\UAL.png"));
+				ALUSymbol.setIcon(
+					    new ImageIcon(
+					        getClass().getResource("/images/UAL.png")
+					    )
+					);
+
 				BACKGROUNDPanel.add(ALUSymbol);
 				ALUSymbol.setBounds(490, 305, 255, 110);
 
