@@ -18,9 +18,8 @@ Fouad AYYAD
 
 Projet Universitaire
 
-=============================================================================
-                              FONCTIONNALITÉS
-=============================================================================
+FONCTIONNALITÉS
+---------------
 - **Éditeur de Code** : Zone de texte intégrée pour écrire les mnémoniques Assembleur.
 - **Compilateur** : Analyse lexicale et syntaxique pour convertir l'Assembleur en Code Machine.
 - **Mémoire Visuelle** : 
@@ -37,9 +36,9 @@ Projet Universitaire
     - "Execute All" (Tout Exécuter) : Exécute le programme entier en une fois.
     - "Step By Step" (Pas à Pas) : Exécute une instruction à la fois pour le débogage.
 
-=============================================================================
-                         PRÉREQUIS ET CONFIGURATION
-=============================================================================
+
+PRÉREQUIS ET CONFIGURATION
+--------------------------
 PRÉREQUIS :
 - Java Development Kit (JDK) 8 ou supérieur.
 - Un IDE Java (Eclipse, IntelliJ, NetBeans) ou une Interface en Ligne de Commande.
@@ -60,9 +59,9 @@ COMMENT EXÉCUTER :
 1. Compilez le projet.
 2. Exécutez la classe principale : `Main.MainClass`.
 
-=============================================================================
-                          GUIDE D'UTILISATION
-=============================================================================
+
+GUIDE D'UTILISATION
+-------------------
 1. Lancez l'application.
 2. Dans la "Fenêtre de Code" (Côté droit), saisissez votre code Assembleur.
    (Voir "Instructions Supportées" ci-dessous).
@@ -74,9 +73,9 @@ COMMENT EXÉCUTER :
    Cliquez sur [Step By Step] pour voir les registres se mettre à jour ligne par ligne.
 5. Utilisez [Reset] pour remettre les registres à zéro ou [Clear All] pour effacer la zone de code.
 
-=============================================================================
-                        INSTRUCTIONS SUPPORTÉES
-=============================================================================
+
+INSTRUCTIONS SUPPORTÉES
+-----------------------
 Cette version du simulateur se concentre principalement sur le Mode d'Adressage 
 IMMÉDIAT (indiqué par le symbole '#').
 
@@ -101,9 +100,9 @@ Mnémoniques Supportés :
 
 * Note : Les valeurs doivent être au format Hexadécimal (ex: $10, $FF, $10CE).
 
-=============================================================================
-                          STRUCTURE DU PROJET
-=============================================================================
+
+STRUCTURE DU PROJET
+-------------------
 Le code source est organisé en trois paquets principaux :
 
 1. package Main
@@ -123,11 +122,12 @@ Le code source est organisé en trois paquets principaux :
      jour les drapeaux CCR (Retenue, Débordement, Zéro, Négatif, etc.).
    - Registres.java : Gère l'incrémentation du Compteur Ordinal (PC).
 
-=============================================================================
-                             LIMITATIONS
-=============================================================================
+
+LIMITATIONS
+-----------
+
 En raison des contraintes de temps du projet, ce simulateur supporte actuellement 
 exclusivement le Mode d'Adressage Immédiat. Les modes Direct, Étendu et Indexé 
 sont structurellement préparés mais pas encore entièrement implémentés dans la 
 logique de l'interface utilisateur.
-=============================================================================
+----------------------------------------------------------------------------------
