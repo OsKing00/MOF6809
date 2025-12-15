@@ -47,6 +47,13 @@ public class Decodage {
 			X = "CB";
 		else if(P1.equalsIgnoreCase("ADDD"))
 			X = "C3";
+		// pour SUB :
+		else if(P1.equalsIgnoreCase("SUBA"))
+			X = "80";
+		else if(P1.equalsIgnoreCase("SUBB"))
+			X = "C0";
+		else if(P1.equalsIgnoreCase("SUBD"))
+			X = "83";
 		
 		}
 		return X;

@@ -9,8 +9,8 @@ public class Erreurs {
 	Scanner input = new Scanner(System.in); 
 	Decodage ERR_DEC = new Decodage();
 
-	String AllInstructionsP1immediat_1_1_octet[] = {"LDA","LDB","ADDA","ADDB"};
-	String AllInstructionsP1immediat_1_2_octet[] = {"LDD","LDU","LDX","ADDD"};
+	String AllInstructionsP1immediat_1_1_octet[] = {"LDA","LDB","ADDA","ADDB","SUBA","SUBB"};
+	String AllInstructionsP1immediat_1_2_octet[] = {"LDD","LDU","LDX","ADDD","SUBD"};
 	String AllInstructionsP1immediat_2_2_octet[] = {"LDS","LDY"};
 	
 /////////////////////////////////////////////////////////////////////

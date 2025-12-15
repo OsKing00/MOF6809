@@ -303,8 +303,8 @@ public class UAL {
 		public ArrayList<int[]> CCR;
 
 		public CalculMembers (ArrayList<Integer> A, ArrayList<Integer> B ,ArrayList<Integer> S , ArrayList<Integer> Y
-				,ArrayList<Integer> X, ArrayList<Integer> U, ArrayList<Integer> D, ArrayList<int[]> CCR) 
-		     {this.A=A; this.B=B; this.S=S; this.Y=Y; this.X=X; this.U=U; this.D=D; this.CCR=CCR;}
+				,ArrayList<Integer> X, ArrayList<Integer> U, ArrayList<int[]> CCR) 
+		     {this.A=A; this.B=B; this.S=S; this.Y=Y; this.X=X; this.U=U; this.CCR=CCR;}
 	}
 	
 	  public int toSignedByte(int x, int nbOctet ) {
@@ -347,7 +347,6 @@ public class UAL {
 	    ArrayList<Integer> valeursY = new ArrayList<>();
 	    ArrayList<Integer> valeursX = new ArrayList<>();
 	    ArrayList<Integer> valeursU = new ArrayList<>();
-	    ArrayList<Integer> valeursD = new ArrayList<>();
 	    ArrayList<int[]> CCR = new ArrayList<>();
 
 
@@ -394,7 +393,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("ADDA")) {
 	        	entry1 = 0; entry2 = 0; res = 0;
@@ -419,7 +417,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("LDB")) {
 	        	entry1 = 0; entry2 = 0; res = 0;
@@ -444,7 +441,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("ADDB")) {
 		        	entry1 = 0; entry2 = 0; res = 0;
@@ -469,7 +465,6 @@ public class UAL {
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
-		            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("LDS"))
 	        {
@@ -506,7 +501,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("LDY"))
 	        {
@@ -542,8 +536,7 @@ public class UAL {
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
-	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));	
+	            valeursU.add(toSignedByte(U , 2));	
 	        }
 	        else if (P1[k].equalsIgnoreCase("LDX"))
 	        {
@@ -580,7 +573,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("LDU"))
 	        {
@@ -617,7 +609,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	        }
 	        else if (P1[k].equalsIgnoreCase("LDD"))
 	        {
@@ -662,7 +653,6 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
 	            
 	            if(B<16) {
 	        		D2 = Integer.toHexString(A);
@@ -736,14 +726,131 @@ public class UAL {
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
-	            valeursD.add(toSignedByte(D , 2));
+	            D=D_AB;
+	        }
+	        else if (P1[k].equalsIgnoreCase("SUBA")) {
+	        	
+	        	entry1 = 0; entry2 = 0; res = 0;
+	        	entry1 = A;
+	        	
+	        	A = (A - ValueROM[Temp - 1]) & 0xFF;
+	        	entry2 = ValueROM[Temp - 1];
+	        	entry1Bin8 = IntToBinary8(entry1);
+	            entry2Bin8 = IntToBinary8(entry2);
+	        	res = toSignedByte(B , 1);
+	            
+	        	flags[0]=CheckCarry8(entry1Bin8,entry2Bin8);
+	            flags[1]=CheckOverFlow(entry1,entry2,res);
+	        	flags[2]=CheckZero(res);
+	        	flags[3]=CheckSigne(res);
+	            flags[4]=CheckParity(res);
+	        	flags[5]=CheckHalfCarry8(entry1Bin8,entry2Bin8);
+	        	
+	        	CCR.add(flags.clone());
+	            valeursA.add(toSignedByte(A , 1)); 
+	            valeursB.add(toSignedByte(B , 1));
+	            valeursS.add(toSignedByte(S , 2));
+	            valeursY.add(toSignedByte(Y , 2));
+	            valeursX.add(toSignedByte(X , 2));
+	            valeursU.add(toSignedByte(U , 2));
+	        }
+	    	
+	        else if (P1[k].equalsIgnoreCase("SUBB")) {
+	        	
+	        	entry1 = 0; entry2 = 0; res = 0;
+	        	entry1 = B;
+	        	
+	        	B = (B - ValueROM[Temp - 1]) & 0xFF;
+	        	entry2 = ValueROM[Temp - 1];
+	        	entry1Bin8 = IntToBinary8(entry1);
+	            entry2Bin8 = IntToBinary8(entry2);
+	        	res = toSignedByte(B , 1);
+	            
+	        	flags[0]=CheckCarry8(entry1Bin8,entry2Bin8);
+	            flags[1]=CheckOverFlow(entry1,entry2,res);
+	        	flags[2]=CheckZero(res);
+	        	flags[3]=CheckSigne(res);
+	            flags[4]=CheckParity(res);
+	        	flags[5]=CheckHalfCarry8(entry1Bin8,entry2Bin8);
+	        	
+	        	CCR.add(flags.clone());
+	            valeursA.add(toSignedByte(A , 1)); 
+	            valeursB.add(toSignedByte(B , 1));
+	            valeursS.add(toSignedByte(S , 2));
+	            valeursY.add(toSignedByte(Y , 2));
+	            valeursX.add(toSignedByte(X , 2));
+	            valeursU.add(toSignedByte(U , 2));
+	        }
+	    	
+	        else if (P1[k].equalsIgnoreCase("SUBD")) {
+	        	
+	        	entry1 = 0; entry2 = 0; res = 0;
+	        	entry1 = D;
+	        	Dhigh= toSignedByte(ValueROM[Temp - 2] , 1) & 0xFF;
+	        	Dlow = toSignedByte(ValueROM[Temp - 1] , 1) & 0xFF;
+	        	
+	        	String D1 = "";
+	        	String D2 = "";
+	        	
+	        	if(Dlow<16) {
+	        		D1 = Integer.toHexString(Dhigh);
+	        		D1 += "0";
+		        	D1 +=  Integer.toHexString(Dlow);
+	        	}
+	        	else {
+	        	D1 = Integer.toHexString(Dhigh); 
+	        	D1 +=  Integer.toHexString(Dlow);
+	        	}
+	        	
+	        	int Dtmp = toSignedByte(Integer.parseInt(D1, 16),2);
+	        	D = toSignedByte(D,2);
+	        	D = (D - Dtmp) & 0xFFFF;
+	        	entry2 = Dtmp;
+	        	entry1Bin16 = IntToBinary16(entry1);
+	            entry2Bin16 = IntToBinary16(entry2);
+	        	res = toSignedByte(D , 2);
+	        	
+	        	if(B<16) {
+	        		D2 = Integer.toHexString(A);
+	        		D2 += "0";
+		        	D2 +=  Integer.toHexString(B);
+	        	}
+	        	else {
+	        	D2 = Integer.toHexString(A); 
+	        	D2 +=  Integer.toHexString(B);
+	        	}
+	        	
+	        	int D_AB = toSignedByte(Integer.parseInt(D2, 16),2);
+	        	D_AB -=Dtmp & 0xFFFF;
+	        	
+	        	int D_ABhigh = (D_AB >> 8) & 0xFF;
+	            int D_ABlow  = D_AB & 0xFF;
+	            
+	        	flags[6]=CheckCarry16(entry1Bin16,entry2Bin16);
+	        	flags[2]=CheckHalfCarry16(entry1Bin16,entry2Bin16);
+	        	flags[0]=CheckParity(res);
+	        	flags[4]=CheckSigne(res);
+	        	flags[5]=CheckZero(res);
+	        	flags[7]=CheckOverFlow(entry1,entry2,res);
+	        	
+	        	CCR.add(flags.clone());
+	        	
+	        	A=D_ABhigh & 0xFF;
+	        	B=D_ABlow & 0xFF;
+	        	
+	            valeursA.add(toSignedByte(A , 1));
+	            valeursB.add(toSignedByte(B , 1));
+	            valeursS.add(toSignedByte(S , 2));
+	            valeursY.add(toSignedByte(Y , 2));
+	            valeursX.add(toSignedByte(X , 2));
+	            valeursU.add(toSignedByte(U , 2));
 	            D=D_AB;
         }
 	        else {}
 	        k++;
 	    }
 
-	    CalculMembers VALEURS = new CalculMembers(valeursA, valeursB ,valeursS , valeursY ,valeursX, valeursU, valeursD, CCR);
+	    CalculMembers VALEURS = new CalculMembers(valeursA, valeursB ,valeursS , valeursY ,valeursX, valeursU, CCR);
 	    
 	   return VALEURS;
 	}
