@@ -94,6 +94,9 @@ Mnémoniques Supportés :
    - ADDA #$xx      (Ajouter à l'Accumulateur A)
    - ADDB #$xx      (Ajouter à l'Accumulateur B)
    - ADDD #$xxxx    (Ajouter au Double Accumulateur D)
+   - SUBA #$xx      (Soustraire de l'Accumulateur A)
+   - SUBB #$xx      (Soustraire de l'Accumulateur B)
+   - SUBD #$xxxx    (Soustraire du Double Accumulateur D)
 
 * Note : Les valeurs doivent être au format Hexadécimal (ex: $10, $FF, $10CE).
 
