@@ -1,6 +1,4 @@
-MOF6809
-Simulation du Microprocesseur Motorola 6809
-
+MOF6809: Une simulation du Microprocesseur Motorola 6809
 
 PRÉSENTATION DU PROJET
 ----------------------
