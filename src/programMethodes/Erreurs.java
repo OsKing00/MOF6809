@@ -9,11 +9,65 @@ public class Erreurs {
 	Scanner input = new Scanner(System.in); 
 	Decodage ERR_DEC = new Decodage();
 
-	String AllInstructionsP1immediat_1_1_octet[] = {"LDA","LDB","ADDA","ADDB","SUBA","SUBB"};
-	String AllInstructionsP1immediat_1_2_octet[] = {"LDD","LDU","LDX","ADDD","SUBD"};
-	String AllInstructionsP1immediat_2_2_octet[] = {"LDS","LDY"};
+	String AllInstructionsP1immediat_1_1_octet[] = {"LDA","LDB","ADDA","ADDB","SUBA","SUBB","ANDA","ANDB","ORA","ORB","CMPA","CMPB","PSHS","PSHU"};
+	String AllInstructionsP1immediat_1_2_octet[] = {"LDD","LDU","LDX","ADDD","SUBD","CMPX"};
+	String AllInstructionsP1immediat_2_2_octet[] = {"LDS","LDY","CMPY","CMPS","CMPU","CMPD"};
+	String AllCasesTFR_EXG[] = {
+			 "TFRA,B","TFRB,A",
+			 "TFRS,U","TFRS,X","TFRS,Y","TFRS,D",
+			 "TFRU,S","TFRU,X","TFRU,Y","TFRU,D",
+			 "TFRX,S","TFRX,U","TFRX,Y","TFRX,D",
+			 "TFRY,S","TFRY,U","TFRY,X","TFRY,D",
+			 "TFRD,S","TFRD,U","TFRD,X","TFRD,Y",
+
+			 "EXGA,B","EXGB,A",
+			 "EXGS,U","EXGS,X","EXGS,Y","EXGS,D",
+			 "EXGU,S","EXGU,X","EXGU,Y","EXGU,D",
+			 "EXGX,S","EXGX,U","EXGX,Y","EXGX,D",
+			 "EXGY,S","EXGY,U","EXGY,X","EXGY,D",
+			 "EXGD,S","EXGD,U","EXGD,X","EXGD,Y"
+			};
+	String STOCK[]= {"STA","STB","STD","STS","STU","STX","STY"};
+	String Inherant[]= {"ABX","CLRA","CLRB","DECA","DECB","INCA","INCB","NOP","MUL"};
+
 	
 /////////////////////////////////////////////////////////////////////
+
+	public boolean CheckInherant(String T)
+	{
+		T = T.replaceAll("\\s+", "");
+		if(T.equals(null) || T.equals(""))
+		return false;
+		
+		for(String n : Inherant)
+		if(T.equalsIgnoreCase(n))
+		return true;
+		
+		return false;
+	}
+	public boolean CheckTFR(String T)
+	{
+		T = T.replaceAll("\\s+", "");
+		if(T.equals(null) || T.equals(""))
+		return false;
+		
+		for(String n : AllCasesTFR_EXG)
+		if(T.equalsIgnoreCase(n))
+		return true;
+		
+		return false;
+	}
+	public boolean CheckInstructionSTOCK(String P1)
+	{
+		if(P1.equals(null) || P1.equals(""))
+		return false;
+		
+		for(String n : STOCK)
+		if(P1.equalsIgnoreCase(n))
+		return true;
+		
+		return false;
+	}
 	public boolean CheckInstructionP1_2_octet(String P1)
 	{
 		if(P1.equals(null) || P1.equals(""))
@@ -72,6 +126,13 @@ public class Erreurs {
 		else
 		return false;
 	}
+	public boolean CheckModeSTOCK(char P21)
+	{
+		if(P21 == '\0')
+		return true;
+		else
+		return false;
+	}
 
 /////////////////////////////////////////////////////////////////////
 
@@ -115,11 +176,15 @@ public class Erreurs {
 	
 ////////////////////////////////////////////////////////////////////
 	
-   public boolean CheckSyntaxErrorsImmediat(String T,String P1 , char P21 , String P22)
+   public boolean CheckSyntaxErrors(String T,String P1 , char P21 , String P22)
    {
 	   if(   (  (CheckInstructionP1_2_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa1octet(P22))&&(CheckSpaces(T))  )  ||   
 			 (  (CheckInstructionP1_3_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))  )  ||
-			    (CheckInstructionP1_4_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))             )
+			 (  (CheckInstructionP1_4_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))  )  ||
+			 (  (CheckInstructionSTOCK(P1))&&(CheckModeSTOCK(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
+			 (  (CheckTFR(T))         )  ||
+			 (  (CheckInherant(T))    )
+		)
 	   {
 		   return true;
 	   }
@@ -146,7 +211,7 @@ public class Erreurs {
 
 	        boolean syntaxOk = false;
 	        if (i < BB.length && i < CC.length && i < DD.length) {
-	            syntaxOk = CheckSyntaxErrorsImmediat(AA.get(i) , BB[i], CC[i], DD[i]);
+	            syntaxOk = CheckSyntaxErrors(AA.get(i) , BB[i], CC[i], DD[i]);
 	        } else {
 	            syntaxOk = false;
 	        }
@@ -189,7 +254,7 @@ public class Erreurs {
 
 	        boolean syntaxOk = false;
 	        if (i < BB.length && i < CC.length && i < DD.length) {
-	            syntaxOk = CheckSyntaxErrorsImmediat(AA.get(i) , BB[i], CC[i], DD[i]);
+	            syntaxOk = CheckSyntaxErrors(AA.get(i) , BB[i], CC[i], DD[i]);
 	        } else {
 	            syntaxOk = false;
 	        }
@@ -216,7 +281,7 @@ public class Erreurs {
 	
 //////////////////////////////////////////////////////////////////////////////////
 	
-	public int[] P1_NumberOctets(String P1[]  , int taille )
+	public int[] P1_NumberOctets(ArrayList<String> AA, String P1[]  , int taille )
 	   {
 		   int TailleOpCode [] = new int [taille];
 		   int conteur = 0;
@@ -228,7 +293,7 @@ public class Erreurs {
 			   conteur = 0;
 			   
 			   if(P1[k]!=null && !P1[k].isEmpty()) {
-			   S = ERR_DEC.toOpCodeImmediat( P1[k] );   // supposons S = "86" 'LDA'.
+			   S = ERR_DEC.toOpCodeImmediat( P1[k], AA.get(k) );   // supposons S = "86" 'LDA'.
 			   }
 			  //  Convert int to String, then to char array
 		        char[] Temp = S.toCharArray();

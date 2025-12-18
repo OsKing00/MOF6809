@@ -1,27 +1,29 @@
 package programMethodes;
 
+import java.util.ArrayList;
+
 public class Memoire {
 	Decodage MEM_DEC = new Decodage();
 	
 
 	
 	public int[] AdressROM() {
-		int[] AdressROM = new int [50];
-		for(int i=0 ; i<50 ; i++) {
+		int[] AdressROM = new int [200];
+		for(int i=0 ; i<200 ; i++) {
 			AdressROM[i]= 0xFC00 + i;
 		}
 		return AdressROM;
 	}
 	
 	public int[] InitValeurROM() {
-		int[] ValeurROM = new int[50];
-		for(int k=0 ; k<50 ; k++) {
+		int[] ValeurROM = new int[200];
+		for(int k=0 ; k<200 ; k++) {
 			ValeurROM[k] = 0xFF;
 		}
 		return ValeurROM;
 	}
 	
-	public int[] ValeurROM(String [] P1 , String P22[] , int P1_NumberOctets [] , int P22_NumberOctets [] , int taille ) {
+	public int[] ValeurROM(ArrayList<String> AA,String [] P1 , String P22[] , int P1_NumberOctets [] , int P22_NumberOctets [] , int taille ) {
 		int ValueROM[] = new int [50];
 		int j = 0;
 		
@@ -33,7 +35,7 @@ public class Memoire {
 			
 			if(P1_NumberOctets [k] == 1)
 			{
-				Y =  MEM_DEC.toOpCodeImmediat(P1[k]);    // LDA ---> 86  donc valeurROM[0] = 86
+				Y =  MEM_DEC.toOpCodeImmediat(P1[k],AA.get(k));    // LDA ---> 86  donc valeurROM[0] = 86
 				char Temp [] =Y.toCharArray();
 				Y="";
 				Y += Temp[0];
@@ -45,7 +47,7 @@ public class Memoire {
 		 if (P1_NumberOctets [k] == 2)
 			{
 			 
-				Y = MEM_DEC.toOpCodeImmediat(P1[k]);   // pour LDS , on va avoir X = 10CE 'entier'
+				Y = MEM_DEC.toOpCodeImmediat(P1[k],AA.get(k));   // pour LDS , on va avoir X = 10CE 'entier'
 		        char[] Temp = String.valueOf(Y).toCharArray();   // 1 | 0 | C | E
 		        for(int r = 0 ; r<4 ; r+=2)
 		        {
@@ -93,21 +95,16 @@ public class Memoire {
 	
 	
 	public int[] AdressRAM() {
-		int[] AdressRAM = {
-			    0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
-			    0x0008, 0x0009, 0x000A, 0x000B, 0x000C, 0x000D, 0x000E, 0x000F,
-			    0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x0016, 0x0017,
-			    0x0018, 0x0019, 0x001A, 0x001B, 0x001C, 0x001D, 0x001E, 0x001F,
-			    0x0020, 0x0021, 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0027,
-			    0x0028, 0x0029, 0x002A, 0x002B, 0x002C, 0x002D, 0x002E, 0x002F,
-			    0x0030, 0x0031
-			};
+		int[] AdressRAM = new int [200];
+		for(int i=0 ; i<200 ; i++) {
+			AdressRAM[i]= 0x0000 + i;
+		}
 		return AdressRAM;
 	}
 	
 	public int[] InitValeurRAM() {
-		int[] ValeurRAM = new int[50];
-		for(int i = 0; i < 50; i++) {
+		int[] ValeurRAM = new int[200];
+		for(int i = 0; i < 200; i++) {
 			ValeurRAM[i] = 0x00;	
 		}
 		return ValeurRAM;

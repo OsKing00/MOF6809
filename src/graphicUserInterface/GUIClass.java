@@ -54,6 +54,7 @@ public class GUIClass {
 	private int stepX=0;
 	private int stepY=0;
 	private int stepCCR=0;
+	private int stepRAM=0;
 	ArrayList<String> T1 = new ArrayList<>();
 	private String[] InstructionName;
 	private String[] P2;
@@ -64,6 +65,7 @@ public class GUIClass {
 	ArrayList<Integer> S_val = new ArrayList<>();
 	ArrayList<Integer> X_val = new ArrayList<>();
 	ArrayList<Integer> Y_val = new ArrayList<>();
+	ArrayList<int[]> RAM_val = new ArrayList<>();
 	ArrayList<int[]> CCR = new ArrayList<>();
 	private int[] PC_val = new int[50];
 
@@ -181,7 +183,7 @@ public class GUIClass {
 	        	Valeur[i]=Valeur[i].trim();
 	        }
 	        
-	        int P1_NombreOctets [] = ERR.P1_NumberOctets(InstructionName, taille);
+	        int P1_NombreOctets [] = ERR.P1_NumberOctets(T1,InstructionName, taille);
 			int P22_NombreOctets [] = ERR.P22_NumberOctets(Valeur, taille );
 
 	        //======== Errors =========
@@ -192,22 +194,25 @@ public class GUIClass {
 	            
 	        	
 	        	//======= StockROMValues =======
-	            ValROM = MEM.ValeurROM(InstructionName, Valeur, P1_NombreOctets, P22_NombreOctets, taille);
+	            ValROM = MEM.ValeurROM(T1,InstructionName, Valeur, P1_NombreOctets, P22_NombreOctets, taille);
 	            DefaultTableModel valrroomm = (DefaultTableModel) ROMtable.getModel();
 	            for (int i = 0; i < ValROM.length; i++) {
 	                String hexVALROM = String.format("%02X", ValROM[i]);
 	                valrroomm.setValueAt(hexVALROM, i, 1);
 	            }
+	            AdRAM = MEM.AdressRAM();
 	            
+	            PC_val = REG.PC(P1_NombreOctets, P22_NombreOctets, AdROM, taille); 
 	            
-	            UAL.CalculMembers Calc = UAL.Calcule(InstructionName, ValROM, P1_NombreOctets, P22_NombreOctets);
+	            UAL.CalculMembers Calc = UAL.Calcule(T1, PC_val , InstructionName, ValROM, AdRAM, P1_NombreOctets, P22_NombreOctets);
 	            A_val = Calc.A;
 	            B_val = Calc.B;
 	            S_val = Calc.S;
 	            X_val = Calc.X;
 	            Y_val = Calc.Y;
-	            CCR = Calc.CCR;
-	            PC_val = REG.PC(P1_NombreOctets, P22_NombreOctets, AdROM, taille);     
+	            RAM_val = Calc.Valram;
+	            CCR = Calc.CCR; 
+	            
 	            step = 0; 
 	            stepA = 0;
 	            stepB = 0;
@@ -215,6 +220,7 @@ public class GUIClass {
 	            stepX = 0;
 	            stepY = 0;
 	            stepCCR = 0;
+	            stepRAM = 0;
 	            
 	            PCTextField.setText(String.format("%04X", PC_val[step]).toUpperCase());
 				INSTRTextField.setText(T1.get(step));
@@ -306,6 +312,23 @@ public class GUIClass {
 	        		CC8.setText(Integer.toString(CCR.get(idxCCR)[7]));
 	        	}
 	        
+	        if (RAM_val == null || RAM_val.size() == 0) {
+	        	DefaultTableModel valrraamm = (DefaultTableModel) RAMtable.getModel();
+				for (int i = 0; i < ValRAMInitial.length; i++) {
+				    String hexVALRAM = String.format("%02X", 0);
+				    valrraamm.setValueAt(hexVALRAM, i, 1);
+				}
+	        } 
+	        	else {
+	        		int idxRAM = RAM_val.size() - 1;
+	        		
+	        		DefaultTableModel valrraamm = (DefaultTableModel) RAMtable.getModel();
+					for (int i = 0; i < ValRAMInitial.length; i++) {
+					    String hexVALRAM = String.format("%02X", RAM_val.get(idxRAM)[i]);
+					    valrraamm.setValueAt(hexVALRAM, i, 1);
+					}
+	        	}
+	        
 	        int idxPC = Math.min(PC_val.length - 1, last - 1);
 	        if (PC_val != null && PC_val.length > idxPC) {
 	            PCTextField.setText(String.format("%04X", PC_val[idxPC]).toUpperCase());
@@ -328,6 +351,8 @@ public class GUIClass {
 		        int idxX = X_val.size() - 1;
 		        int idxY = Y_val.size() - 1;
 		        int idxCCR = CCR.size() - 1;
+		        int idxRAM = RAM_val.size() - 1;
+
 
 		        stepA++;
 		        stepB++;
@@ -335,6 +360,7 @@ public class GUIClass {
 		        stepX++;
 		        stepY++;
 		        stepCCR++;
+		        stepRAM++;
 		        step++;
 		        if (step >= T1.size()) {
 		        	
@@ -347,6 +373,7 @@ public class GUIClass {
 		        	if (stepX >= X_val.size()) stepX = idxX+1;
 		        	if (stepY >= Y_val.size()) stepY = idxY+1;
 		        	if (stepCCR >= CCR.size()) stepCCR = idxCCR+1;
+		        	if (stepRAM >= RAM_val.size()) stepRAM = idxRAM+1;
 		        ATextField.setText(String.format("%02X", A_val.get(stepA-1) & 0xFF).toUpperCase());
 		        BTextField.setText(String.format("%02X", B_val.get(stepB-1) & 0xFF).toUpperCase());
 		        STextField.setText(String.format("%04X", S_val.get(stepS-1) & 0xFFFF).toUpperCase());
@@ -362,9 +389,14 @@ public class GUIClass {
         		CC6.setText(Integer.toString(CCR.get(step)[5]));
         		CC7.setText(Integer.toString(CCR.get(step)[6]));
         		CC8.setText(Integer.toString(CCR.get(step)[7]));
+        		
+        		DefaultTableModel valrraamm = (DefaultTableModel) RAMtable.getModel();
+				for (int r = 0; r < ValRAMInitial.length; r++) {
+				    String hexVALRAM = String.format("%02X", RAM_val.get(stepRAM-1)[r]);
+				    valrraamm.setValueAt(hexVALRAM, r, 1);
+				}
+				
 		        }
-		        
-		       
 		    });
 		 
 		//======= ClearAllButton ========
@@ -527,6 +559,156 @@ public class GUIClass {
 							{null, null},
 							{null, null},
 							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
 						},
 						new String[] {
 							"Adresses", "Valeurs"
@@ -598,6 +780,156 @@ public class GUIClass {
 					ROMtable.setRowSorter(null);
 					ROMtable.setModel(new DefaultTableModel(
 						new Object[][] {
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
+							{null, null},
 							{null, null},
 							{null, null},
 							{null, null},
