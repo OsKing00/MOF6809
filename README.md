@@ -82,21 +82,81 @@ IMMÉDIAT (indiqué par le symbole '#').
 Mnémoniques Supportés :
 
 1. INSTRUCTIONS DE CHARGEMENT (LOAD) :
-   - LDA  #$xx      (Charger l'Accumulateur A - 8 bits)
-   - LDB  #$xx      (Charger l'Accumulateur B - 8 bits)
-   - LDD  #$xxxx    (Charger le Double Accumulateur D - 16 bits)
-   - LDS  #$xxxx    (Charger le Pointeur de Pile S - 16 bits)
-   - LDU  #$xxxx    (Charger le Pointeur de Pile Utilisateur U - 16 bits)
-   - LDX  #$xxxx    (Charger le Registre d'Index X - 16 bits)
-   - LDY  #$xxxx    (Charger le Registre d'Index Y - 16 bits)
 
-2. INSTRUCTIONS ARITHMÉTIQUES :
-   - ADDA #$xx      (Ajouter à l'Accumulateur A)
-   - ADDB #$xx      (Ajouter à l'Accumulateur B)
-   - ADDD #$xxxx    (Ajouter au Double Accumulateur D)
-   - SUBA #$xx      (Soustraire de l'Accumulateur A)
-   - SUBB #$xx      (Soustraire de l'Accumulateur B)
-   - SUBD #$xxxx    (Soustraire du Double Accumulateur D)
+   * LDA  #$xx      (Charger l'Accumulateur A - 8 bits)
+   * LDB  #$xx      (Charger l'Accumulateur B - 8 bits)
+   * LDD  #$xxxx    (Charger le Double Accumulateur D - 16 bits)
+   * LDS  #$xxxx    (Charger le Pointeur de Pile S - 16 bits)
+   * LDU  #$xxxx    (Charger le Pointeur de Pile Utilisateur U - 16 bits)
+   * LDX  #$xxxx    (Charger le Registre d'Index X - 16 bits)
+   * LDY  #$xxxx    (Charger le Registre d'Index Y - 16 bits)
+
+2. INSTRUCTIONS ARITHMÉTIQUES (ADDITION) :
+
+   * ADDA #$xx      (Ajouter à l'Accumulateur A)
+   * ADDB #$xx      (Ajouter à l'Accumulateur B)
+   * ADDD #$xxxx    (Ajouter au Double Accumulateur D)
+
+3. INSTRUCTIONS ARITHMÉTIQUES (SOUSTRACTION) :
+
+   * SUBA #$xx      (Soustraire de l'Accumulateur A)
+   * SUBB #$xx      (Soustraire de l'Accumulateur B)
+   * SUBD #$xxxx    (Soustraire du Double Accumulateur D)
+
+4. INSTRUCTIONS LOGIQUES (AND / OR) :
+
+   * ANDA #$xx      (ET logique avec l'Accumulateur A)
+   * ANDB #$xx      (ET logique avec l'Accumulateur B)
+   * ORA  #$xx      (OU logique avec l'Accumulateur A)
+   * ORB  #$xx      (OU logique avec l'Accumulateur B)
+
+5. INSTRUCTIONS LOGIQUES (COMPARAISON) :
+
+   * CMPA #$xx      (Comparer avec l'Accumulateur A)
+   * CMPB #$xx      (Comparer avec l'Accumulateur B)
+   * CMPD #$xxxx    (Comparer avec le Double Accumulateur D)
+   * CMPS #$xxxx    (Comparer avec le Pointeur de Pile S)
+   * CMPU #$xxxx    (Comparer avec le Pointeur de Pile U)
+   * CMPX #$xxxx    (Comparer avec le Registre X)
+   * CMPY #$xxxx    (Comparer avec le Registre Y)
+
+6. INSTRUCTIONS DE TRANSFERT (R1 → R2) :
+
+   * TFR  R1,R2     (Transférer le contenu d’un registre vers un autre, ex : TFR A,B ; TFR Y,S)
+
+7. INSTRUCTIONS D’ÉCHANGE (R1 ↔ R2) :
+
+   * EXG  R1,R2     (Échanger le contenu de deux registres, ex : EXG A,B ; EXG Y,S)
+
+8. INSTRUCTIONS DE STOCKAGE (REGISTRE → MÉMOIRE) :
+
+   * STA            (Stocker l’Accumulateur A en mémoire)
+   * STB            (Stocker l’Accumulateur B en mémoire)
+   * STD            (Stocker le Double Accumulateur D en mémoire)
+   * STS            (Stocker le Pointeur de Pile S en mémoire)
+   * STU            (Stocker le Pointeur de Pile U en mémoire)
+   * STX            (Stocker le Registre X en mémoire)
+   * STY            (Stocker le Registre Y en mémoire)
+
+9. INSTRUCTIONS PUSH / PULL :
+
+   * PSHS           (Empiler des registres sur la pile système S)
+   * PSHU           (Empiler des registres sur la pile utilisateur U)
+   * PULS           (Dépiler des registres depuis la pile système S)
+   * PULU           (Dépiler des registres depuis la pile utilisateur U)
+
+10. INSTRUCTIONS INHÉRENTES :
+
+    * ABX            (Ajouter B au registre X)
+    * CLRA           (Mettre l’Accumulateur A à zéro)
+    * CLRB           (Mettre l’Accumulateur B à zéro)
+    * DECA           (Décrémenter l’Accumulateur A)
+    * DECB           (Décrémenter l’Accumulateur B)
+    * INCA           (Incrémenter l’Accumulateur A)
+    * INCB           (Incrémenter l’Accumulateur B)
+    * NOP            (Aucune opération)
+    * MUL            (Multiplier A par B, résultat dans D)
+
 
 * Note : Les valeurs doivent être au format Hexadécimal (ex: $10, $FF, $10CE).
 
