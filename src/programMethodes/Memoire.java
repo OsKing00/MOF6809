@@ -8,23 +8,23 @@ public class Memoire {
 
 	
 	public int[] AdressROM() {
-		int[] AdressROM = new int [200];
-		for(int i=0 ; i<200 ; i++) {
+		int[] AdressROM = new int [1024];
+		for(int i=0 ; i<1024 ; i++) {
 			AdressROM[i]= 0xFC00 + i;
 		}
 		return AdressROM;
 	}
 	
 	public int[] InitValeurROM() {
-		int[] ValeurROM = new int[200];
-		for(int k=0 ; k<200 ; k++) {
+		int[] ValeurROM = new int[1024];
+		for(int k=0 ; k<1024 ; k++) {
 			ValeurROM[k] = 0xFF;
 		}
 		return ValeurROM;
 	}
 	
 	public int[] ValeurROM(ArrayList<String> AA,String [] P1 , String P22[] , int P1_NumberOctets [] , int P22_NumberOctets [] , int taille ) {
-		int ValueROM[] = new int [50];
+		int ValueROM[] = new int [1024];
 		int j = 0;
 		
 		for( int k = 0 ; k<taille  ; k++)
@@ -95,16 +95,16 @@ public class Memoire {
 	
 	
 	public int[] AdressRAM() {
-		int[] AdressRAM = new int [200];
-		for(int i=0 ; i<200 ; i++) {
+		int[] AdressRAM = new int [1280];
+		for(int i=0 ; i<1280 ; i++) {
 			AdressRAM[i]= 0x0000 + i;
 		}
 		return AdressRAM;
 	}
 	
 	public int[] InitValeurRAM() {
-		int[] ValeurRAM = new int[200];
-		for(int i = 0; i < 200; i++) {
+		int[] ValeurRAM = new int[1280];
+		for(int i = 0; i < 1280; i++) {
 			ValeurRAM[i] = 0x00;	
 		}
 		return ValeurRAM;

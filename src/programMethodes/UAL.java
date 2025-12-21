@@ -455,9 +455,11 @@ public class UAL {
 	    {
 	    	String OTH_INS = AA.get(k);
 	    	OTH_INS = OTH_INS.replaceAll("\\s+", "");
+	    	String Etendu = AA.get(k);
+	    	Etendu = Etendu.substring(0, 5);
 	    	Temp += P1_NumberOctets[k] + P22_NumberOctets[k];
 	    	
-	        if (P1[k].equalsIgnoreCase("LDA")) {
+	        if (P1[k].equalsIgnoreCase("LDA") && !Etendu.equalsIgnoreCase("LDA $")) {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = A;
 	            A = ValueROM[Temp - 1] & 0xFF;
@@ -507,7 +509,7 @@ public class UAL {
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDB")) {
+	        else if (P1[k].equalsIgnoreCase("LDB") && !Etendu.equalsIgnoreCase("LDB $")) {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = B;
 	        	B = ValueROM[Temp - 1] & 0xFF;
@@ -557,7 +559,7 @@ public class UAL {
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDS"))
+	        else if (P1[k].equalsIgnoreCase("LDS") && !Etendu.equalsIgnoreCase("LDS $"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = S;
@@ -594,7 +596,7 @@ public class UAL {
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDY"))
+	        else if (P1[k].equalsIgnoreCase("LDY") && !Etendu.equalsIgnoreCase("LDY $"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = Y;
@@ -631,7 +633,7 @@ public class UAL {
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));	
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDX"))
+	        else if (P1[k].equalsIgnoreCase("LDX") && !Etendu.equalsIgnoreCase("LDX $"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = X;
@@ -668,7 +670,7 @@ public class UAL {
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDU"))
+	        else if (P1[k].equalsIgnoreCase("LDU") && !Etendu.equalsIgnoreCase("LDU $"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = U;
@@ -705,7 +707,7 @@ public class UAL {
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDD"))
+	        else if (P1[k].equalsIgnoreCase("LDD") && !Etendu.equalsIgnoreCase("LDD $"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = toSignedByte(D,2);
@@ -2183,6 +2185,626 @@ public class UAL {
 		        	Dlow = D & 0xFF;
 		        	flags[0]=CheckParity(D);
 		        	flags[5]=CheckZero(D);
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(Dhigh , 1)); 
+		            valeursB.add(toSignedByte(Dlow , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDA $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		A=valram[idxRAM] & 0xFF;
+			        		else {}
+		        	}
+
+		            res = toSignedByte(A , 1);
+		            
+		            flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDB $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		B=valram[idxRAM] & 0xFF;
+			        		else {}
+		        	}
+
+		            res = toSignedByte(B , 1);
+		            
+		            flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDS $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+		        	
+		        	String S1 = "";
+		        	
+		        	
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		Shigh=valram[idxRAM] & 0xFF;
+			        		else {}
+		        		if(idxRAM+1<1280)
+			        		Slow=valram[idxRAM+1] & 0xFF;
+			        		else {}
+		        	}
+		        	
+		        	if(Slow<16) {
+		        		S1 = Integer.toHexString(Shigh);
+		        		S1 += "0";
+			        	S1 +=  Integer.toHexString(Slow);
+		        	}
+		        	else {
+		        	S1 = Integer.toHexString(Shigh); 
+		        	S1 +=  Integer.toHexString(Slow);
+		        	}
+		        	
+		        	S = Integer.parseInt(S1, 16) & 0xFFFF;
+		        	
+		        	res = toSignedByte(S , 2);
+		        	
+		        	flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDU $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+		        	
+		        	String U1 = "";
+		        	
+		        	
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		Uhigh=valram[idxRAM] & 0xFF;
+			        		else {}
+		        		if(idxRAM+1<1280)
+			        		Ulow=valram[idxRAM+1] & 0xFF;
+			        		else {}
+		        	}
+		        	
+		        	if(Ulow<16) {
+		        		U1 = Integer.toHexString(Uhigh);
+		        		U1 += "0";
+			        	U1 +=  Integer.toHexString(Ulow);
+		        	}
+		        	else {
+		        	U1 = Integer.toHexString(Uhigh); 
+		        	U1 +=  Integer.toHexString(Ulow);
+		        	}
+		        	
+		        	U = Integer.parseInt(U1, 16) & 0xFFFF;
+		        	
+		        	res = toSignedByte(U , 2);
+		        	
+		        	flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDX $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+		        	
+		        	String X1 = "";
+		        	
+		        	
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		Xhigh=valram[idxRAM] & 0xFF;
+			        		else {}
+		        		if(idxRAM+1<1280)
+			        		Xlow=valram[idxRAM+1] & 0xFF;
+			        		else {}
+		        	}
+		        	
+		        	if(Xlow<16) {
+		        		X1 = Integer.toHexString(Xhigh);
+		        		X1 += "0";
+			        	X1 +=  Integer.toHexString(Xlow);
+		        	}
+		        	else {
+		        	X1 = Integer.toHexString(Xhigh); 
+		        	X1 +=  Integer.toHexString(Xlow);
+		        	}
+		        	
+		        	X = Integer.parseInt(X1, 16) & 0xFFFF;
+		        	
+		        	res = toSignedByte(X , 2);
+		        	
+		        	flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDY $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+		        	
+		        	String Y1 = "";
+		        	
+		        	
+		        	if (idxRAM != -1) {
+		        		if(idxRAM+1<1280)
+			        		Yhigh=valram[idxRAM] & 0xFF;
+			        		else {}
+		        		if(idxRAM+1<1280)
+			        		Ylow=valram[idxRAM+1] & 0xFF;
+			        		else {}
+		        	}
+		        	
+		        	if(Ylow<16) {
+		        		Y1 = Integer.toHexString(Yhigh);
+		        		Y1 += "0";
+			        	Y1 +=  Integer.toHexString(Ylow);
+		        	}
+		        	else {
+		        	Y1 = Integer.toHexString(Yhigh); 
+		        	Y1 +=  Integer.toHexString(Ylow);
+		        	}
+		        	
+		        	Y = Integer.parseInt(Y1, 16) & 0xFFFF;
+		        	
+		        	res = toSignedByte(Y , 2);
+		        	
+		        	flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDD $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+		        	
+		        	String D1 = "";
+		        	
+		        	
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		Dhigh=valram[idxRAM] & 0xFF;
+			        		else {}
+		        		if(idxRAM+1 < 1280)
+			        		Dlow=valram[idxRAM+1] & 0xFF;
+			        		else {}
+		        	}
+		        	
+		        	if(Dlow<16) {
+		        		D1 = Integer.toHexString(Dhigh);
+		        		D1 += "0";
+			        	D1 +=  Integer.toHexString(Dlow);
+		        	}
+		        	else {
+		        	D1 = Integer.toHexString(Dhigh); 
+		        	D1 +=  Integer.toHexString(Dlow);
+		        	}
+		        	
+		        	D = Integer.parseInt(D1, 16) & 0xFFFF;
+		        	
+		        	res = toSignedByte(D , 2);
+		        	
+		        	flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(Dhigh , 1)); 
+		            valeursB.add(toSignedByte(Dlow , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (Etendu.equalsIgnoreCase("ADDA $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		A= (A + valram[idxRAM]) & 0xFF;
+			        		else {}
+		        	}
+
+		            res = toSignedByte(A , 1);
+		            
+		            flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+
+		        }
+		        else if (Etendu.equalsIgnoreCase("LDB $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		B= (B + valram[idxRAM]) & 0xFF;
+			        		else {}
+		        	}
+
+		            res = toSignedByte(B , 1);
+		            
+		            flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+
+		        }
+		        else if (Etendu.equalsIgnoreCase("ADDD $"))
+		        {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+		        	
+		        	String D1 = "";
+		        	String D2 = "";
+		        	if(B<16) {
+		        		D1 = Integer.toHexString(A);
+		        		D1 += "0";
+			        	D1 +=  Integer.toHexString(B);
+		        	}
+		        	else {
+		        	D1 = Integer.toHexString(A); 
+		        	D1 +=  Integer.toHexString(B);
+		        	}
+		        	
+		        	int D11 = Integer.parseInt(D1, 16) & 0xFFFF;
+		        	
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<1280)
+			        		Dhigh=valram[idxRAM] & 0xFF;
+			        		else {}
+		        		if(idxRAM+1 < 1280)
+			        		Dlow=valram[idxRAM+1] & 0xFF;
+			        		else {}
+		        	}
+		        	
+		        	if(Dlow<16) {
+		        		D2 = Integer.toHexString(Dhigh);
+		        		D2 += "0";
+			        	D2 +=  Integer.toHexString(Dlow);
+		        	}
+		        	else {
+		        	D2 = Integer.toHexString(Dhigh); 
+		        	D2 +=  Integer.toHexString(Dlow);
+		        	}
+		        	
+		        	int D22 = Integer.parseInt(D2, 16) & 0xFFFF;
+		        	
+		        	D = (D11 + D22) & 0xFFFF;
+		        	
+		        	Dhigh = (D >> 8) & 0xFF;
+		        	Dlow = D & 0xFF;
+		        	
+		        	res = toSignedByte(D , 2);
+		        	
+		        	flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
 		        	CCR.add(flags.clone());
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(Dhigh , 1)); 

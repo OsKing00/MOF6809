@@ -67,7 +67,7 @@ public class GUIClass {
 	ArrayList<Integer> Y_val = new ArrayList<>();
 	ArrayList<int[]> RAM_val = new ArrayList<>();
 	ArrayList<int[]> CCR = new ArrayList<>();
-	private int[] PC_val = new int[50];
+	private int[] PC_val = new int[512];
 
 	private void initComponents() {
 		
@@ -323,10 +323,15 @@ public class GUIClass {
 	        		int idxRAM = RAM_val.size() - 1;
 	        		
 	        		DefaultTableModel valrraamm = (DefaultTableModel) RAMtable.getModel();
-					for (int i = 0; i < ValRAMInitial.length; i++) {
-					    String hexVALRAM = String.format("%02X", RAM_val.get(idxRAM)[i]);
-					    valrraamm.setValueAt(hexVALRAM, i, 1);
-					}
+	        		int len = Math.min(
+	        				ValRAMInitial.length,
+	        			    RAM_val.get(idxRAM).length
+	        			);
+
+	        			for (int i = 0; i < len; i++) {
+	        			    String hexVALRAM = String.format("%02X", RAM_val.get(idxRAM)[i]);
+	        			    valrraamm.setValueAt(hexVALRAM, i, 1);
+	        			}
 	        	}
 	        
 	        int idxPC = Math.min(PC_val.length - 1, last - 1);
@@ -391,11 +396,15 @@ public class GUIClass {
         		CC8.setText(Integer.toString(CCR.get(step)[7]));
         		
         		DefaultTableModel valrraamm = (DefaultTableModel) RAMtable.getModel();
-				for (int r = 0; r < ValRAMInitial.length; r++) {
-				    String hexVALRAM = String.format("%02X", RAM_val.get(stepRAM-1)[r]);
-				    valrraamm.setValueAt(hexVALRAM, r, 1);
-				}
-				
+				int len = Math.min(
+					    ValRAMInitial.length,
+					    RAM_val.get(idxRAM).length
+					);
+
+					for (int r = 0; r < len; r++) {
+					    String hexVALRAM = String.format("%02X", RAM_val.get(stepRAM-1)[r]);
+					    valrraamm.setValueAt(hexVALRAM, r, 1);
+					}
 		        }
 		    });
 		 
@@ -507,228 +516,24 @@ public class GUIClass {
 					RAMtable.setShowHorizontalLines(true);
 					RAMtable.setShowVerticalLines(true);
 					RAMtable.setRowSorter(null);
-					RAMtable.setModel(new DefaultTableModel(
-						new Object[][] {
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-						},
-						new String[] {
-							"Adresses", "Valeurs"
-						}
+
+					DefaultTableModel model = new DefaultTableModel(
+					        new String[]{"Adresses", "Valeurs"},
+					        1280   // number of rows (0x0000 → 0x04FF)
 					) {
-						Class<?>[] columnTypes = new Class<?>[] {
-							Integer.class, Integer.class
-						};
-						boolean[] columnEditable = new boolean[] {
-							false, false
-						};
-						@Override
-						public Class<?> getColumnClass(int columnIndex) {
-							return columnTypes[columnIndex];
-						}
-						@Override
-						public boolean isCellEditable(int rowIndex, int columnIndex) {
-							return columnEditable[columnIndex];
-						}
-					});
+					    @Override
+					    public boolean isCellEditable(int row, int column) {
+					        return false;
+					    }
+
+					    @Override
+					    public Class<?> getColumnClass(int column) {
+					        return Integer.class;
+					    }
+					};
+
+					RAMtable.setModel(model);
+
 					RAMtable.setFont(new Font("Azeret Mono Light", Font.BOLD, 15));
 					RAMscrollPane.setViewportView(RAMtable);
 					
@@ -778,229 +583,24 @@ public class GUIClass {
 					ROMtable.setShowHorizontalLines(true);
 					ROMtable.setShowVerticalLines(true);
 					ROMtable.setRowSorter(null);
-					ROMtable.setModel(new DefaultTableModel(
-						new Object[][] {
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-							{null, null},
-						},
-						new String[] {
-							"Adresses", "Valeurs"
-						}
-					) 
-					{
-						Class<?>[] columnTypes = new Class<?>[] {
-							Integer.class, Integer.class
-						};
-						boolean[] columnEditable = new boolean[] {
-							false, false
-						};
-						@Override
-						public Class<?> getColumnClass(int columnIndex) {
-							return columnTypes[columnIndex];
-						}
-						@Override
-						public boolean isCellEditable(int rowIndex, int columnIndex) {
-							return columnEditable[columnIndex];
-						}
-					});
+
+					DefaultTableModel romModel = new DefaultTableModel(
+					        new String[]{"Adresses", "Valeurs"},
+					        1024   // adjust if ROM size is different
+					) {
+					    @Override
+					    public boolean isCellEditable(int row, int column) {
+					        return false;
+					    }
+
+					    @Override
+					    public Class<?> getColumnClass(int column) {
+					        return Integer.class;
+					    }
+					};
+
+					ROMtable.setModel(romModel);
+
 					ROMtable.setFont(new Font("Azeret Mono Light", Font.BOLD, 15));
 					ROMscrollPane.setViewportView(ROMtable);
 				}

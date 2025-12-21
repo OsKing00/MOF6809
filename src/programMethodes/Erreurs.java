@@ -29,10 +29,22 @@ public class Erreurs {
 			};
 	String STOCK[]= {"STA","STB","STD","STS","STU","STX","STY"};
 	String Inherant[]= {"ABX","CLRA","CLRB","DECA","DECB","INCA","INCB","NOP","MUL"};
+	String Etendu[]= {"LDA","LDB","LDS","LDY","LDD","LDU","LDX","ADDA","ADDB","ADDD"};
 
 	
 /////////////////////////////////////////////////////////////////////
 
+	public boolean CheckEtendu(String P1)
+	{
+		if(P1.equals(null) || P1.equals(""))
+		return false;
+		
+		for(String n : Etendu)
+		if(P1.equalsIgnoreCase(n))
+		return true;
+		
+		return false;
+	}
 	public boolean CheckInherant(String T)
 	{
 		T = T.replaceAll("\\s+", "");
@@ -126,7 +138,7 @@ public class Erreurs {
 		else
 		return false;
 	}
-	public boolean CheckModeSTOCK(char P21)
+	public boolean CheckMode$only(char P21)
 	{
 		if(P21 == '\0')
 		return true;
@@ -181,7 +193,8 @@ public class Erreurs {
 	   if(   (  (CheckInstructionP1_2_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa1octet(P22))&&(CheckSpaces(T))  )  ||   
 			 (  (CheckInstructionP1_3_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))  )  ||
 			 (  (CheckInstructionP1_4_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))  )  ||
-			 (  (CheckInstructionSTOCK(P1))&&(CheckModeSTOCK(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
+			 (  (CheckInstructionSTOCK(P1))&&(CheckMode$only(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
+			 (  (CheckEtendu(P1))&&(CheckMode$only(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
 			 (  (CheckTFR(T))         )  ||
 			 (  (CheckInherant(T))    )
 		)

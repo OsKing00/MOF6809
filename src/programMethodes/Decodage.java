@@ -26,21 +26,23 @@ public class Decodage {
 		String X="";
 		String INSTRS = T;
     	INSTRS = INSTRS.replaceAll("\\s+", "");
+    	String Etendu = T;
+    	Etendu = Etendu.substring(0, 5);
 		if(!P1.equals(null)) {
 		// pour LD : 
-		if(P1.equalsIgnoreCase("LDA"))
+		if(P1.equalsIgnoreCase("LDA") && !Etendu.equalsIgnoreCase("LDA $"))
 			X = "86";
-		else if(P1.equalsIgnoreCase("LDB"))
+		else if(P1.equalsIgnoreCase("LDB") && !Etendu.equalsIgnoreCase("LDB $"))
 			X = "C6";
-		else if(P1.equalsIgnoreCase("LDD"))
+		else if(P1.equalsIgnoreCase("LDD") && !Etendu.equalsIgnoreCase("LDD $"))
 			X = "CC";
-		else if(P1.equalsIgnoreCase("LDS"))
+		else if(P1.equalsIgnoreCase("LDS") && !Etendu.equalsIgnoreCase("LDS $"))
 			X = "10CE";
-		else if(P1.equalsIgnoreCase("LDU"))
+		else if(P1.equalsIgnoreCase("LDU") && !Etendu.equalsIgnoreCase("LDU $"))
 			X = "CE";
-		else if(P1.equalsIgnoreCase("LDX"))
+		else if(P1.equalsIgnoreCase("LDX") && !Etendu.equalsIgnoreCase("LDX $"))
 			X = "8E";
-		else if(P1.equalsIgnoreCase("LDY"))
+		else if(P1.equalsIgnoreCase("LDY") && !Etendu.equalsIgnoreCase("LDY $"))
 			X = "108E";
 		// pour ADD : 
 		else if(P1.equalsIgnoreCase("ADDA"))
@@ -230,6 +232,26 @@ public class Decodage {
 		    X = "12";
 		else if(INSTRS.equalsIgnoreCase("MUL")) 
 		    X = "3D";
+		else if(Etendu.equalsIgnoreCase("LDA $")) 
+		    X = "B6";
+		else if(Etendu.equalsIgnoreCase("LDB $")) 
+		    X = "F6";
+		else if(Etendu.equalsIgnoreCase("LDS $")) 
+		    X = "10FE";
+		else if(Etendu.equalsIgnoreCase("LDU $")) 
+		    X = "FE";
+		else if(Etendu.equalsIgnoreCase("LDX $")) 
+		    X = "BE";
+		else if(Etendu.equalsIgnoreCase("LDY $")) 
+		    X = "10BE";
+		else if(Etendu.equalsIgnoreCase("LDD $")) 
+		    X = "FC";
+		else if(Etendu.equalsIgnoreCase("ADDA $")) 
+		    X = "BB";
+		else if(Etendu.equalsIgnoreCase("ADDB $")) 
+		    X = "FB";
+		else if(Etendu.equalsIgnoreCase("ADDD $")) 
+		    X = "F3";
 		}
 		return X;
 	}
