@@ -35,7 +35,10 @@ FONCTIONNALITÉS
 - **Modes d'Exécution** :
     - "Execute All" (Tout Exécuter) : Exécute le programme entier en une fois.
     - "Step By Step" (Pas à Pas) : Exécute une instruction à la fois pour le débogage.
-
+- **Modes d'adressage** :
+    - Immédiat.
+    - Inhérant.
+    - Etendu:
 
 PRÉREQUIS ET CONFIGURATION
 --------------------------
@@ -187,7 +190,7 @@ LIMITATIONS
 -----------
 
 En raison des contraintes de temps du projet, ce simulateur supporte actuellement 
-exclusivement le Mode d'Adressage Immédiat. Les modes Direct, Étendu et Indexé 
+exclusivement le Mode d'Adressage Immédiat. Les modes Direct et Indexé 
 sont structurellement préparés mais pas encore entièrement implémentés dans la 
 logique de l'interface utilisateur.
 ----------------------------------------------------------------------------------
