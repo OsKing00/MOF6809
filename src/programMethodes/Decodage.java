@@ -3,11 +3,13 @@ package programMethodes;
 public class Decodage {
 
 	public int hexToSignedInt(String hexString) {
-		
-	   
+		byte octetSigne = 0x00;
+	   if(hexString.equals("DP"))
+	   {}
+	   else {
 	    int val = Integer.parseInt(hexString, 16);
 	    
-	    byte octetSigne = (byte) val;
+	    octetSigne = (byte) val;}
 	    
 	    return octetSigne;
 	    
@@ -21,28 +23,28 @@ public class Decodage {
 	    return Integer.parseInt(A, 16);
 	}
 	
-	public String toOpCodeImmediat(String P1,String T)
+	public String InstructionIoOpCode(String P1, char P21, String T)
 	{
 		String X="";
-		String INSTRS = T;
-    	INSTRS = INSTRS.replaceAll("\\s+", "");
-    	String Etendu = T;
-    	Etendu = Etendu.substring(0, 5);
+		String OTH_INS = T;
+    	OTH_INS = OTH_INS.replaceAll("\\s+", "");
+    	
 		if(!P1.equals(null)) {
+			if(P21 == '#') {
 		// pour LD : 
-		if(P1.equalsIgnoreCase("LDA") && !Etendu.equalsIgnoreCase("LDA $"))
+		if(P1.equalsIgnoreCase("LDA"))
 			X = "86";
-		else if(P1.equalsIgnoreCase("LDB") && !Etendu.equalsIgnoreCase("LDB $"))
+		else if(P1.equalsIgnoreCase("LDB"))
 			X = "C6";
-		else if(P1.equalsIgnoreCase("LDD") && !Etendu.equalsIgnoreCase("LDD $"))
+		else if(P1.equalsIgnoreCase("LDD"))
 			X = "CC";
-		else if(P1.equalsIgnoreCase("LDS") && !Etendu.equalsIgnoreCase("LDS $"))
+		else if(P1.equalsIgnoreCase("LDS"))
 			X = "10CE";
-		else if(P1.equalsIgnoreCase("LDU") && !Etendu.equalsIgnoreCase("LDU $"))
+		else if(P1.equalsIgnoreCase("LDU"))
 			X = "CE";
-		else if(P1.equalsIgnoreCase("LDX") && !Etendu.equalsIgnoreCase("LDX $"))
+		else if(P1.equalsIgnoreCase("LDX"))
 			X = "8E";
-		else if(P1.equalsIgnoreCase("LDY") && !Etendu.equalsIgnoreCase("LDY $"))
+		else if(P1.equalsIgnoreCase("LDY"))
 			X = "108E";
 		// pour ADD : 
 		else if(P1.equalsIgnoreCase("ADDA"))
@@ -83,118 +85,146 @@ public class Decodage {
 			X = "1183";
 		else if(P1.equalsIgnoreCase("CMPD"))
 			X = "1083";
+		// pour PUSH :
+		else if(P1.equalsIgnoreCase("PSHS"))
+			X = "34";
+		else if(P1.equalsIgnoreCase("PSHU"))
+			X = "36";
+		else {}
+		return X;
+	}
 		// pour TFR & EXG :
-		else if(INSTRS.equalsIgnoreCase("TFRA,B")) 
+		if(OTH_INS.equalsIgnoreCase("TFRA,B")) 
 		    X = "1F89";
-		else if(INSTRS.equalsIgnoreCase("EXGA,B")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGA,B")) 
 		    X = "1E89";
+		
+		else if(OTH_INS.equalsIgnoreCase("EXGA,DP")) 
+		    X = "1E8B";
+		else if(OTH_INS.equalsIgnoreCase("EXGDP,A")) 
+		    X = "1EB8";
+		else if(OTH_INS.equalsIgnoreCase("EXGDP,B")) 
+		    X = "1EB9";
+		else if(OTH_INS.equalsIgnoreCase("EXGB,DP")) 
+		    X = "1E9B";
+		else if(OTH_INS.equalsIgnoreCase("TFRA,DP")) 
+		    X = "1F8B";
+		else if(OTH_INS.equalsIgnoreCase("TFRDP,A")) 
+		    X = "1FB8";
+		else if(OTH_INS.equalsIgnoreCase("TFRDP,B")) 
+		    X = "1FB9";
+		else if(OTH_INS.equalsIgnoreCase("TFRB,DP")) 
+		    X = "1F9B";
 
-		else if(INSTRS.equalsIgnoreCase("TFRB,A")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRB,A")) 
 		    X = "1F98";
-		else if(INSTRS.equalsIgnoreCase("EXGB,A")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGB,A")) 
 		    X = "1E98";
 
-		else if(INSTRS.equalsIgnoreCase("TFRS,U")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRS,U")) 
 		    X = "1F34";
-		else if(INSTRS.equalsIgnoreCase("EXGS,U")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGS,U")) 
 		    X = "1E34";
 
-		else if(INSTRS.equalsIgnoreCase("TFRS,X")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRS,X")) 
 		    X = "1F41";
-		else if(INSTRS.equalsIgnoreCase("EXGS,X")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGS,X")) 
 		    X = "1E41";
 
-		else if(INSTRS.equalsIgnoreCase("TFRS,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRS,Y")) 
 		    X = "1F42";
-		else if(INSTRS.equalsIgnoreCase("EXGS,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGS,Y")) 
 		    X = "1E42";
 
-		else if(INSTRS.equalsIgnoreCase("TFRS,D")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRS,D")) 
 		    X = "1F40";
-		else if(INSTRS.equalsIgnoreCase("EXGS,D")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGS,D")) 
 		    X = "1E40";
 
-		else if(INSTRS.equalsIgnoreCase("TFRU,S")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRU,S")) 
 		    X = "1F31";
-		else if(INSTRS.equalsIgnoreCase("EXGU,S")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGU,S")) 
 		    X = "1E31";
 
-		else if(INSTRS.equalsIgnoreCase("TFRU,X")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRU,X")) 
 		    X = "1F33";
-		else if(INSTRS.equalsIgnoreCase("EXGU,X")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGU,X")) 
 		    X = "1E33";
 
-		else if(INSTRS.equalsIgnoreCase("TFRU,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRU,Y")) 
 		    X = "1F32";
-		else if(INSTRS.equalsIgnoreCase("EXGU,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGU,Y")) 
 		    X = "1E32";
 
-		else if(INSTRS.equalsIgnoreCase("TFRU,D")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRU,D")) 
 		    X = "1F30";
-		else if(INSTRS.equalsIgnoreCase("EXGU,D")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGU,D")) 
 		    X = "1E30";
 
-		else if(INSTRS.equalsIgnoreCase("TFRX,S")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRX,S")) 
 		    X = "1F11";
-		else if(INSTRS.equalsIgnoreCase("EXGX,S")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGX,S")) 
 		    X = "1E11";
 
-		else if(INSTRS.equalsIgnoreCase("TFRX,U")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRX,U")) 
 		    X = "1F13";
-		else if(INSTRS.equalsIgnoreCase("EXGX,U")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGX,U")) 
 		    X = "1E13";
 
-		else if(INSTRS.equalsIgnoreCase("TFRX,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRX,Y")) 
 		    X = "1F12";
-		else if(INSTRS.equalsIgnoreCase("EXGX,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGX,Y")) 
 		    X = "1E12";
 
-		else if(INSTRS.equalsIgnoreCase("TFRX,D")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRX,D")) 
 		    X = "1F14";
-		else if(INSTRS.equalsIgnoreCase("EXGX,D")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGX,D")) 
 		    X = "1E14";
 
-		else if(INSTRS.equalsIgnoreCase("TFRY,S")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRY,S")) 
 		    X = "1F21";
-		else if(INSTRS.equalsIgnoreCase("EXGY,S")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGY,S")) 
 		    X = "1E21";
 
-		else if(INSTRS.equalsIgnoreCase("TFRY,U")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRY,U")) 
 		    X = "1F23";
-		else if(INSTRS.equalsIgnoreCase("EXGY,U")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGY,U")) 
 		    X = "1E23";
 
-		else if(INSTRS.equalsIgnoreCase("TFRY,X")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRY,X")) 
 		    X = "1F21";
-		else if(INSTRS.equalsIgnoreCase("EXGY,X")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGY,X")) 
 		    X = "1E21";
 
-		else if(INSTRS.equalsIgnoreCase("TFRY,D")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRY,D")) 
 		    X = "1F20";
-		else if(INSTRS.equalsIgnoreCase("EXGY,D")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGY,D")) 
 		    X = "1E20";
 
-		else if(INSTRS.equalsIgnoreCase("TFRD,S")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRD,S")) 
 		    X = "1F01";
-		else if(INSTRS.equalsIgnoreCase("EXGD,S")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGD,S")) 
 		    X = "1E01";
 
-		else if(INSTRS.equalsIgnoreCase("TFRD,U")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRD,U")) 
 		    X = "1F03";
-		else if(INSTRS.equalsIgnoreCase("EXGD,U")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGD,U")) 
 		    X = "1E03";
 
-		else if(INSTRS.equalsIgnoreCase("TFRD,X")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRD,X")) 
 		    X = "1F04";
-		else if(INSTRS.equalsIgnoreCase("EXGD,X")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGD,X")) 
 		    X = "1E04";
 
-		else if(INSTRS.equalsIgnoreCase("TFRD,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("TFRD,Y")) 
 		    X = "1F02";
-		else if(INSTRS.equalsIgnoreCase("EXGD,Y")) 
+		else if(OTH_INS.equalsIgnoreCase("EXGD,Y")) 
 		    X = "1E02";
-		// pour STOCK :
-		else if(P1.equalsIgnoreCase("STA"))
+		else {}
+		
+		if( P21 =='>'|| P21 == '\0') {
+			// pour ETENDU :
+		if(P1.equalsIgnoreCase("STA"))
 			X = "B7";
 		else if(P1.equalsIgnoreCase("STB"))
 			X = "F7";
@@ -208,52 +238,60 @@ public class Decodage {
 			X = "BF";
 		else if(P1.equalsIgnoreCase("STY"))
 			X = "10BF";
-		// pour PUSH :
-		else if(P1.equalsIgnoreCase("PSHS"))
-			X = "34";
-		else if(P1.equalsIgnoreCase("PSHU"))
-			X = "36";
-		// pour INHERANT :
-		else if(INSTRS.equalsIgnoreCase("ABX")) 
-		    X = "3A";
-		else if(INSTRS.equalsIgnoreCase("CLRA")) 
-		    X = "4F";
-		else if(INSTRS.equalsIgnoreCase("CLRB")) 
-		    X = "5F";
-		else if(INSTRS.equalsIgnoreCase("DECA")) 
-		    X = "4A";
-		else if(INSTRS.equalsIgnoreCase("DECB")) 
-		    X = "5A";
-		else if(INSTRS.equalsIgnoreCase("INCA")) 
-		    X = "4C";
-		else if(INSTRS.equalsIgnoreCase("INCB")) 
-		    X = "5C";
-		else if(INSTRS.equalsIgnoreCase("NOP")) 
-		    X = "12";
-		else if(INSTRS.equalsIgnoreCase("MUL")) 
-		    X = "3D";
-		else if(Etendu.equalsIgnoreCase("LDA $")) 
+		else if(P1.equalsIgnoreCase("LDA")) 
 		    X = "B6";
-		else if(Etendu.equalsIgnoreCase("LDB $")) 
+		else if(P1.equalsIgnoreCase("LDB")) 
 		    X = "F6";
-		else if(Etendu.equalsIgnoreCase("LDS $")) 
+		else if(P1.equalsIgnoreCase("LDS")) 
 		    X = "10FE";
-		else if(Etendu.equalsIgnoreCase("LDU $")) 
+		else if(P1.equalsIgnoreCase("LDU")) 
 		    X = "FE";
-		else if(Etendu.equalsIgnoreCase("LDX $")) 
+		else if(P1.equalsIgnoreCase("LDX")) 
 		    X = "BE";
-		else if(Etendu.equalsIgnoreCase("LDY $")) 
+		else if(P1.equalsIgnoreCase("LDY")) 
 		    X = "10BE";
-		else if(Etendu.equalsIgnoreCase("LDD $")) 
+		else if(P1.equalsIgnoreCase("LDD")) 
 		    X = "FC";
-		else if(Etendu.equalsIgnoreCase("ADDA $")) 
+		else if(P1.equalsIgnoreCase("ADDA")) 
 		    X = "BB";
-		else if(Etendu.equalsIgnoreCase("ADDB $")) 
+		else if(P1.equalsIgnoreCase("ADDB")) 
 		    X = "FB";
-		else if(Etendu.equalsIgnoreCase("ADDD $")) 
+		else if(P1.equalsIgnoreCase("ADDD")) 
 		    X = "F3";
-		}
 		return X;
+	}
+		if(P21=='<')
+		{
+			
+			
+			
+			
+		}
+			
+		
+		
+		
+		// pour INHERANT :
+		if(OTH_INS.equalsIgnoreCase("ABX")) 
+		    X = "3A";
+		else if(OTH_INS.equalsIgnoreCase("CLRA")) 
+		    X = "4F";
+		else if(OTH_INS.equalsIgnoreCase("CLRB")) 
+		    X = "5F";
+		else if(OTH_INS.equalsIgnoreCase("DECA")) 
+		    X = "4A";
+		else if(OTH_INS.equalsIgnoreCase("DECB")) 
+		    X = "5A";
+		else if(OTH_INS.equalsIgnoreCase("INCA")) 
+		    X = "4C";
+		else if(OTH_INS.equalsIgnoreCase("INCB")) 
+		    X = "5C";
+		else if(OTH_INS.equalsIgnoreCase("NOP")) 
+		    X = "12";
+		else if(OTH_INS.equalsIgnoreCase("MUL")) 
+		    X = "3D";
+		}
+	return X;
 	}
 }
 

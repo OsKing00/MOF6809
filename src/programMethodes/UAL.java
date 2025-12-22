@@ -4,138 +4,6 @@ import java.util.ArrayList;
 
 public class UAL {
 	Decodage UAL_DEC = new Decodage();
-	// --- Binary (display only) ---
-	public int[] IntToBinary8SUB(int d) {
-	    int[] b = new int[8];
-	    int v = d & 0xFF;
-	    for (int i = 0; i < 8; i++) {
-	        b[i] = (v >> i) & 1;
-	    }
-	    return b;
-	}
-
-	public int[] IntToBinary16SUB(int d) {
-	    int[] b = new int[16];
-	    int v = d & 0xFFFF;
-	    for (int i = 0; i < 16; i++) {
-	        b[i] = (v >> i) & 1;
-	    }
-	    return b;
-	}
-
-	// --- Carry → interpreted as SUB C flag (1 = no borrow, 0 = borrow) ---
-	public int CheckCarry8SUB(int[] A, int[] B) {
-	    int ua = 0, ub = 0;
-	    for (int i = 0; i < 8; i++) {
-	        ua |= (A[i] & 1) << i;
-	        ub |= (B[i] & 1) << i;
-	    }
-	    return (ua < ub) ? 0 : 1;
-	}
-
-	public int CheckCarry16SUB(int[] A, int[] B) {
-	    int ua = 0, ub = 0;
-	    for (int i = 0; i < 16; i++) {
-	        ua |= (A[i] & 1) << i;
-	        ub |= (B[i] & 1) << i;
-	    }
-	    return (ua < ub) ? 0 : 1;
-	}
-
-	// --- Half-carry → interpreted as HALF-BORROW ---
-	public int CheckHalfCarry8SUB(int[] A, int[] B) {
-	    int la = 0, lb = 0;
-	    for (int i = 0; i < 4; i++) {
-	        la |= (A[i] & 1) << i;
-	        lb |= (B[i] & 1) << i;
-	    }
-	    return (la < lb) ? 1 : 0;
-	}
-
-	public int CheckHalfCarry16SUB(int[] A, int[] B) {
-	    int la = 0, lb = 0;
-	    for (int i = 0; i < 8; i++) {
-	        la |= (A[i] & 1) << i;
-	        lb |= (B[i] & 1) << i;
-	    }
-	    return (la < lb) ? 1 : 0;
-	}
-
-	// --- Sign ---
-	public int CheckSigneSUB(int Result) {
-	    return (Result < 0) ? 1 : 0;
-	}
-
-	// --- Zero ---
-	public int CheckZeroSUB(int Result) {
-	    return (Result == 0) ? 1 : 0;
-	}
-
-	// --- Parity (even result, same semantics as original) ---
-	public int CheckParitySUB(int Result) {
-	    return ((Result & 1) == 0) ? 1 : 0;
-	}
-
-	// --- Overflow (SUBTRACTION ONLY): A - B ---
-	public int CheckOverFlowSUB(int entr1, int entr2, int Result) {
-	    int s1 = (entr1 < 0) ? 1 : 0;
-	    int s2 = (entr2 < 0) ? 1 : 0;
-	    int sr = (Result < 0) ? 1 : 0;
-	    return (s1 != s2 && sr != s1) ? 1 : 0;
-	}
-	
-	
-	//***************************************************************************************************
-	//***************************************************************************************************
-	//***************************************************************************************************
-	//***************************************************************************************************
-
-	
-//	public int[] DecimalToTwosComplement8( int d )
-//	{
-//		int ToBinary[] = new int[8];
-//		if( d<0 )
-//			ToBinary[7] = 1;
-//		else 
-//			ToBinary[7] = 0;
-//		d = Math.abs(d);   // maintenant d est positif!
-//		
-//		int temp = 0;
-//		int counter = 0;
-//		
-//		while(d>1)
-//		{  
-//			temp = d%2;
-//			ToBinary[counter] = temp;
-//			d = d/2;
-//		   counter++;
-//		}
-//		ToBinary[counter] = 1;
-//		return ToBinary;
-//	}
-//	public int[] DecimalToTwosComplement16( int d )
-//	{
-//		int ToBinary[] = new int[16];
-//		if( d<0 )
-//			ToBinary[15] = 1;
-//		else 
-//			ToBinary[15] = 0;
-//		d = Math.abs(d);   // maintenant d est positif!
-//		
-//		int temp = 0;
-//		int counter = 0;
-//		
-//		while(d>1)
-//		{  
-//			temp = d%2;
-//			ToBinary[counter] = temp;
-//			d = d/2;
-//		   counter++;
-//		}
-//		ToBinary[counter] = 1;
-//		return ToBinary;
-//	}
-	
 	public int CheckCarry8(int A[] , int ADDA[])
 	{
 		int Carry = 0;
@@ -335,10 +203,7 @@ public class UAL {
 	public int[] DecimalToTwosComplement8(int valeur) {
 	    int[] resultat = new int[8];
 	    
-	    // On parcourt les 8 premiers bits (de 0 à 7)
 	    for (int i = 0; i < 8; i++) {
-	        // (valeur >> i) : décale les bits vers la droite de i positions
-	        // & 1           : ne garde que le dernier bit (0 ou 1)
 	        resultat[i] = (valeur >> i) & 1;
 	    }
 	    
@@ -346,11 +211,7 @@ public class UAL {
 	}
 	public int[] DecimalToTwosComplement16(int valeur) {
 	    int[] resultat = new int[16];
-	    
-	    // On parcourt les 8 premiers bits (de 0 à 7)
 	    for (int i = 0; i < 16; i++) {
-	        // (valeur >> i) : décale les bits vers la droite de i positions
-	        // & 1           : ne garde que le dernier bit (0 ou 1)
 	        resultat[i] = (valeur >> i) & 1;
 	    }
 	    
@@ -359,10 +220,10 @@ public class UAL {
 	public int SignedBinaryToInteger(int[] binaire) {
 	    int rawValue = 0;
 
-	    // 1. On reconstruit l'entier brut (comme si c'était non signé, de 0 à 255)
+	    
 	    for (int i = 0; i < 8; i++) {
 	        if (binaire[i] == 1) {
-	            // On ajoute la puissance de 2 correspondante (1, 2, 4, 8...)
+	            
 	            rawValue += (1 << i); 
 	        }
 	    }
@@ -376,14 +237,14 @@ public class UAL {
 		public ArrayList<Integer> U;
 		public ArrayList<Integer> X;
 		public ArrayList<Integer> Y;
-		public ArrayList<Integer> D;
+		public ArrayList<Integer> DP;
 		public ArrayList<int[]> CCR;
 		public ArrayList<int[]> Valram;
 		
 
 		public CalculMembers (ArrayList<Integer> A, ArrayList<Integer> B ,ArrayList<Integer> S , ArrayList<Integer> Y
-				,ArrayList<Integer> X, ArrayList<Integer> U, ArrayList<int[]> CCR, ArrayList<int[]> Valram) 
-		     {this.A=A; this.B=B; this.S=S; this.Y=Y; this.X=X; this.U=U; this.CCR=CCR; this.Valram=Valram;}
+				,ArrayList<Integer> X, ArrayList<Integer> U, ArrayList<Integer> DP, ArrayList<int[]> CCR, ArrayList<int[]> Valram) 
+		     {this.A=A; this.B=B; this.S=S; this.Y=Y; this.X=X; this.U=U; this.DP=DP; this.CCR=CCR; this.Valram=Valram;}
 	}
 	
 	  public int toSignedByte(int x, int nbOctet ) {
@@ -395,9 +256,10 @@ public class UAL {
 }
 
 
-	public CalculMembers Calcule(ArrayList<String> AA, int PC[], String P1[], int ValueROM[],int ADRAM[], int P1_NumberOctets[] , int P22_NumberOctets []) {
+	public CalculMembers Calcule(ArrayList<String> AA, int PC[], String P1[], char P21[], int ValueROM[],int ADRAM[], int P1_NumberOctets[] , int P22_NumberOctets []) {
 	    int A = 0x00;
 	    int B = 0x00;
+	    int DP = 0x00;
 	    
 	    int S = 0x0000;
 	    int Shigh = 0x00;
@@ -430,6 +292,7 @@ public class UAL {
 	    ArrayList<Integer> valeursY = new ArrayList<>();
 	    ArrayList<Integer> valeursX = new ArrayList<>();
 	    ArrayList<Integer> valeursU = new ArrayList<>();
+	    ArrayList<Integer> valeursDP = new ArrayList<>();
 	    ArrayList<int[]> CCR = new ArrayList<>();
 	    ArrayList<int[]> Valram = new ArrayList<>();
 	    
@@ -455,11 +318,11 @@ public class UAL {
 	    {
 	    	String OTH_INS = AA.get(k);
 	    	OTH_INS = OTH_INS.replaceAll("\\s+", "");
-	    	String Etendu = AA.get(k);
-	    	Etendu = Etendu.substring(0, 5);
 	    	Temp += P1_NumberOctets[k] + P22_NumberOctets[k];
 	    	
-	        if (P1[k].equalsIgnoreCase("LDA") && !Etendu.equalsIgnoreCase("LDA $")) {
+	    	if(P21[k] == '#') {
+	    	
+	        if (P1[k].equalsIgnoreCase("LDA")) {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = A;
 	            A = ValueROM[Temp - 1] & 0xFF;
@@ -468,8 +331,6 @@ public class UAL {
 	            entry2Bin8 = DecimalToTwosComplement8(entry2);
 	            res = toSignedByte(A , 1);
 	            
-	        	//flags[6]=CheckCarry(entry1Bin,entry2Bin);
-	        	//flags[2]=CheckHalfCarry(entry1Bin,entry2Bin);
 	            flags[0]=CheckParity(res);
 	        	flags[4]=CheckSigne(res);
 	        	flags[5]=CheckZero(res);
@@ -479,6 +340,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -504,12 +366,13 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDB") && !Etendu.equalsIgnoreCase("LDB $")) {
+	        else if (P1[k].equalsIgnoreCase("LDB")) {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = B;
 	        	B = ValueROM[Temp - 1] & 0xFF;
@@ -518,8 +381,6 @@ public class UAL {
 	            entry2Bin8 = DecimalToTwosComplement8(entry2);
 	        	res = toSignedByte(B , 1);
 	            
-	        	//flags[6]=CheckCarry(entry1Bin,entry2Bin);
-	        	//flags[2]=CheckHalfCarry(entry1Bin,entry2Bin);
 	            flags[0]=CheckParity(res);
 	        	flags[4]=CheckSigne(res);
 	        	flags[5]=CheckZero(res);
@@ -529,6 +390,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -554,12 +416,13 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDS") && !Etendu.equalsIgnoreCase("LDS $"))
+	        else if (P1[k].equalsIgnoreCase("LDS"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = S;
@@ -591,12 +454,13 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDY") && !Etendu.equalsIgnoreCase("LDY $"))
+	        else if (P1[k].equalsIgnoreCase("LDY"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = Y;
@@ -628,12 +492,13 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));	
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDX") && !Etendu.equalsIgnoreCase("LDX $"))
+	        else if (P1[k].equalsIgnoreCase("LDX"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = X;
@@ -665,12 +530,13 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDU") && !Etendu.equalsIgnoreCase("LDU $"))
+	        else if (P1[k].equalsIgnoreCase("LDU"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = U;
@@ -702,12 +568,13 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
 	            valeursU.add(toSignedByte(U , 2));
 	        }
-	        else if (P1[k].equalsIgnoreCase("LDD") && !Etendu.equalsIgnoreCase("LDD $"))
+	        else if (P1[k].equalsIgnoreCase("LDD"))
 	        {
 	        	entry1 = 0; entry2 = 0; res = 0;
 	        	entry1 = toSignedByte(D,2);
@@ -734,8 +601,6 @@ public class UAL {
 	            entry2Bin16 = DecimalToTwosComplement16(entry2);
 	        	res = toSignedByte(D , 2);
 	            
-//	        	flags[6]=CheckCarry16(entry1Bin16,entry2Bin16);
-//	        	flags[2]=CheckHalfCarry16(entry1Bin16,entry2Bin16);
 	        	flags[0]=CheckParity(res);
 	        	flags[4]=CheckSigne(res);
 	        	flags[5]=CheckZero(res);
@@ -747,6 +612,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1));
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -821,6 +687,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1));
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -849,6 +716,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -877,6 +745,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1)); 
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -942,6 +811,7 @@ public class UAL {
 	        	Valram.add(valram.clone());
 	            valeursA.add(toSignedByte(A , 1));
 	            valeursB.add(toSignedByte(B , 1));
+	            valeursDP.add(toSignedByte(DP , 1));
 	            valeursS.add(toSignedByte(S , 2));
 	            valeursY.add(toSignedByte(Y , 2));
 	            valeursX.add(toSignedByte(X , 2));
@@ -970,6 +840,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -999,6 +870,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -1030,6 +902,7 @@ public class UAL {
 			        	Valram.add(valram.clone());
 			            valeursA.add(toSignedByte(A , 1)); 
 			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
 			            valeursS.add(toSignedByte(S , 2));
 			            valeursY.add(toSignedByte(Y , 2));
 			            valeursX.add(toSignedByte(X , 2));
@@ -1061,6 +934,7 @@ public class UAL {
 			        	Valram.add(valram.clone());
 			            valeursA.add(toSignedByte(A , 1)); 
 			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
 			            valeursS.add(toSignedByte(S , 2));
 			            valeursY.add(toSignedByte(Y , 2));
 			            valeursX.add(toSignedByte(X , 2));
@@ -1086,6 +960,7 @@ public class UAL {
 			        	Valram.add(valram.clone());
 			            valeursA.add(toSignedByte(A , 1)); 
 			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
 			            valeursS.add(toSignedByte(S , 2));
 			            valeursY.add(toSignedByte(Y , 2));
 			            valeursX.add(toSignedByte(X , 2));
@@ -1112,6 +987,7 @@ public class UAL {
 			        	Valram.add(valram.clone());
 			            valeursA.add(toSignedByte(A , 1)); 
 			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
 			            valeursS.add(toSignedByte(S , 2));
 			            valeursY.add(toSignedByte(Y , 2));
 			            valeursX.add(toSignedByte(X , 2));
@@ -1148,6 +1024,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -1184,6 +1061,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -1220,6 +1098,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -1256,6 +1135,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -1293,6 +1173,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1));
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -1310,630 +1191,6 @@ public class UAL {
 		        	
 		        	int D_AB = toSignedByte(Integer.parseInt(D2, 16),2);
 		        	D=D_AB;
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRA,B"))
-		        {
-		        	B = A;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRB,A"))
-		        {
-		        	A = B;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRS,U"))
-		        {
-		        	U = S;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRS,X"))
-		        {
-		        	X = S;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRS,Y"))
-		        {
-		        	Y = S;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRS,D"))
-		        {
-		        	D = S;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRU,S"))
-		        {
-		        	S = U;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRU,X"))
-		        {
-		        	X = U;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRU,Y"))
-		        {
-		        	Y = U;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRU,D"))
-		        {
-		        	D = U;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRX,S"))
-		        {
-		        	S = X;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRX,U"))
-		        {
-		        	S = X;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRX,Y"))
-		        {
-		        	Y = X;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRX,D"))
-		        {
-		        	D = X;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRY,S"))
-		        {
-		        	S = Y;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRY,U"))
-		        {
-		        	U = Y;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRY,X"))
-		        {
-		        	X = Y;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRY,D"))
-		        {
-		        	D = Y;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRD,S"))
-		        {
-		        	S = D;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRD,U"))
-		        {
-		        	U = D;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRD,X"))
-		        {
-		        	X = D;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("TFRD,Y"))
-		        {
-		        	Y = D;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-	        
-	        	//EXG****************************************
-	        
-		        else if (OTH_INS.equalsIgnoreCase("EXGA,B"))
-		        {
-		        	int tmp = A; A = B; B = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGB,A"))
-		        {
-		        	int tmp = A; A = B; B = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGS,U"))
-		        {
-		        	int tmp = S; S = U; U = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGS,X"))
-		        {
-		        	int tmp = S; S = X; X = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGS,Y"))
-		        {
-		        	int tmp = S; S = Y; Y = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGS,D"))
-		        {
-		        	int tmp = S; S = D; D = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGU,S"))
-		        {
-		        	int tmp = U; U = S; S = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGU,X"))
-		        {
-		        	int tmp = U; U = X; X = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGU,Y"))
-		        {
-		        	int tmp = U; U = Y; Y = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGU,D"))
-		        {
-		        	int tmp = U; U = D; D = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGX,S"))
-		        {
-		        	int tmp = X; X = S; S = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGX,U"))
-		        {
-		        	int tmp = X; X = U; U = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGX,Y"))
-		        {
-		        	int tmp = X; X = Y; Y = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGX,D"))
-		        {
-		        	int tmp = X; X = D; D = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGY,S"))
-		        {
-		        	int tmp = Y; Y = S; S = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGY,U"))
-		        {
-		        	int tmp = Y; Y = U; U = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGY,X"))
-		        {
-		        	int tmp = Y; Y = X; X = tmp;
-		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGY,D"))
-		        {
-		        	int tmp = Y; Y = D; D = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGD,S"))
-		        {
-		        	int tmp = D; D = S; S = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGD,U"))
-		        {
-		        	int tmp = D; D = U; U = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGD,X"))
-		        {
-		        	int tmp = D; D = X; X = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (OTH_INS.equalsIgnoreCase("EXGD,Y"))
-		        {
-		        	int tmp = D; D = Y; Y = tmp;
-		        	int D_ABhigh = (D >> 8) & 0xFF;
-		            int D_ABlow  = D & 0xFF;
-		            A=D_ABhigh;  B=D_ABlow;
-		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (P1[k].equalsIgnoreCase("STA")) {
-	        	res = 0;
-	        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
-	        	AdLow = ValueROM[Temp - 1]  & 0xFF;
-	        	String Ad1 = "";
-	        	if(AdLow<16) {
-	        		Ad1 = Integer.toHexString(AdHigh);
-	        		Ad1 += "0";
-		        	Ad1 +=  Integer.toHexString(AdLow);
-	        	}
-	        	else {
-	        	Ad1 = Integer.toHexString(AdHigh); 
-	        	Ad1 +=  Integer.toHexString(AdLow);
-	        	}
-	        	
-	        	Ad = Integer.parseInt(Ad1);
-	        	
-	        	int idxRAM = -1;
-
-	        	for (int i = 0; i < ADRAM.length; i++) {
-	        	    if (ADRAM[i] == Ad) {
-	        	        idxRAM = i;
-	        	        break;
-	        	    }
-	        	}
-
-	        	if (idxRAM != -1) {
-	        		if(idxRAM<200)
-		        		valram[idxRAM]=A;
-		        		else {}
-	        	}
-
-	            res = toSignedByte(A , 1);
-	            
-	            flags[0]=CheckParity(res);
-	        	flags[4]=CheckSigne(res);
-	        	flags[5]=CheckZero(res);
-	        	flags[7]=0;
-	        	
-	        	CCR.add(flags.clone());
-	        	Valram.add(valram.clone());
-	            valeursA.add(toSignedByte(A , 1)); 
-	            valeursB.add(toSignedByte(B , 1));
-	            valeursS.add(toSignedByte(S , 2));
-	            valeursY.add(toSignedByte(Y , 2));
-	            valeursX.add(toSignedByte(X , 2));
-	            valeursU.add(toSignedByte(U , 2));
-	        }
-		        else if (P1[k].equalsIgnoreCase("STB")) {
-		        	res = 0;
-		        	AdHigh= toSignedByte(ValueROM[Temp - 2],1)  & 0xFF;
-		        	AdLow = toSignedByte(ValueROM[Temp - 1],1)  & 0xFF;
-		        	String Ad1 = "";
-		        	if(AdLow<16) {
-		        		Ad1 = Integer.toHexString(AdHigh);
-		        		Ad1 += "0";
-			        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	else {
-		        	Ad1 = Integer.toHexString(AdHigh); 
-		        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	
-		        	Ad = Integer.parseInt(Ad1) & 0xFFFF;
-		        	
-		        	int idxRAM = -1;
-		        	
-		        	for (int i = 0; i < ADRAM.length; i++) {
-		        		ADRAM[i]= toSignedByte(ADRAM[i],1) ;
-		        	    if (ADRAM[i] == Ad) {
-		        	        idxRAM = i;
-		        	        break;
-		        	    }
-		        	}
-
-		        	if (idxRAM != -1) {
-		        		if(idxRAM<200)
-			        		valram[idxRAM]=B;
-			        		else {}
-		        	}
-
-		            res = toSignedByte(B , 1);
-		            
-		            flags[0]=CheckParity(res);
-		        	flags[4]=CheckSigne(res);
-		        	flags[5]=CheckZero(res);
-		        	flags[7]=0;
-		        	
-		        	CCR.add(flags.clone());
-		        	Valram.add(valram.clone());
-		            valeursA.add(toSignedByte(A , 1)); 
-		            valeursB.add(toSignedByte(B , 1));
-		            valeursS.add(toSignedByte(S , 2));
-		            valeursY.add(toSignedByte(Y , 2));
-		            valeursX.add(toSignedByte(X , 2));
-		            valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (P1[k].equalsIgnoreCase("STD")) {
-		        	res = 0;
-		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
-		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
-		        	String Ad1 = "";
-		        	if(AdLow<16) {
-		        		Ad1 = Integer.toHexString(AdHigh);
-		        		Ad1 += "0";
-			        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	else {
-		        	Ad1 = Integer.toHexString(AdHigh); 
-		        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	
-		        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
-		        	
-		        	int idxRAM = -1;
-
-		        	for (int i = 0; i < ADRAM.length; i++) {
-		        	    if (ADRAM[i] == Ad) {
-		        	        idxRAM = i;
-		        	        break;
-		        	    }
-		        	}
-
-		        	if (idxRAM != -1) {
-		        		if(idxRAM<200)
-		        		valram[idxRAM]=A;
-		        		else {}
-		        		
-		        		if((idxRAM+1)<200)
-		        		valram[idxRAM+1]=B;
-		        		else {}
-		        	}
-
-		            res = toSignedByte(D , 1);
-		            
-		            flags[0]=CheckParity(res);
-		        	flags[4]=CheckSigne(res);
-		        	flags[5]=CheckZero(res);
-		        	flags[7]=0;
-		        	
-		        	CCR.add(flags.clone());
-		        	Valram.add(valram.clone());
-		            valeursA.add(toSignedByte(A , 1)); 
-		            valeursB.add(toSignedByte(B , 1));
-		            valeursS.add(toSignedByte(S , 2));
-		            valeursY.add(toSignedByte(Y , 2));
-		            valeursX.add(toSignedByte(X , 2));
-		            valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (P1[k].equalsIgnoreCase("STS")) {
-		        	res = 0;
-		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
-		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
-		        	String Ad1 = "";
-		        	if(AdLow<16) {
-		        		Ad1 = Integer.toHexString(AdHigh);
-		        		Ad1 += "0";
-			        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	else {
-		        	Ad1 = Integer.toHexString(AdHigh); 
-		        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	
-		        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
-		        	
-		        	int idxRAM = -1;
-
-		        	for (int i = 0; i < ADRAM.length; i++) {
-		        	    if (ADRAM[i] == Ad) {
-		        	        idxRAM = i;
-		        	        break;
-		        	    }
-		        	}
-		        	Shigh = (S >> 8) & 0xFF;
-		        	Slow  = S & 0xFF;
-
-		        	if (idxRAM != -1) {
-		        		if(idxRAM<200)
-		        		valram[idxRAM]=Shigh;
-		        		else {}
-		        		
-		        		if((idxRAM+1)<200)
-		        		valram[idxRAM+1]=Slow;
-		        		else {}
-		        	}
-
-		            res = toSignedByte(S , 1);
-		            
-		            flags[0]=CheckParity(res);
-		        	flags[4]=CheckSigne(res);
-		        	flags[5]=CheckZero(res);
-		        	flags[7]=0;
-		        	
-		        	CCR.add(flags.clone());
-		        	Valram.add(valram.clone());
-		            valeursA.add(toSignedByte(A , 1)); 
-		            valeursB.add(toSignedByte(B , 1));
-		            valeursS.add(toSignedByte(S , 2));
-		            valeursY.add(toSignedByte(Y , 2));
-		            valeursX.add(toSignedByte(X , 2));
-		            valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (P1[k].equalsIgnoreCase("STU")) {
-		        	res = 0;
-		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
-		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
-		        	String Ad1 = "";
-		        	if(AdLow<16) {
-		        		Ad1 = Integer.toHexString(AdHigh);
-		        		Ad1 += "0";
-			        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	else {
-		        	Ad1 = Integer.toHexString(AdHigh); 
-		        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	
-		        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
-		        	
-		        	int idxRAM = -1;
-
-		        	for (int i = 0; i < ADRAM.length; i++) {
-		        	    if (ADRAM[i] == Ad) {
-		        	        idxRAM = i;
-		        	        break;
-		        	    }
-		        	}
-		        	Uhigh = (U >> 8) & 0xFF;
-		        	Ulow  = U & 0xFF;
-
-		        	if (idxRAM != -1) {
-		        		if(idxRAM<200)
-		        		valram[idxRAM]=Uhigh;
-		        		else {}
-		        		
-		        		if((idxRAM+1)<200)
-		        		valram[idxRAM+1]=Ulow;
-		        		else {}
-		        	}
-
-		            res = toSignedByte(U , 1);
-		            
-		            flags[0]=CheckParity(res);
-		        	flags[4]=CheckSigne(res);
-		        	flags[5]=CheckZero(res);
-		        	flags[7]=0;
-		        	
-		        	CCR.add(flags.clone());
-		        	Valram.add(valram.clone());
-		            valeursA.add(toSignedByte(A , 1)); 
-		            valeursB.add(toSignedByte(B , 1));
-		            valeursS.add(toSignedByte(S , 2));
-		            valeursY.add(toSignedByte(Y , 2));
-		            valeursX.add(toSignedByte(X , 2));
-		            valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (P1[k].equalsIgnoreCase("STX")) {
-		        	res = 0;
-		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
-		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
-		        	String Ad1 = "";
-		        	if(AdLow<16) {
-		        		Ad1 = Integer.toHexString(AdHigh);
-		        		Ad1 += "0";
-			        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	else {
-		        	Ad1 = Integer.toHexString(AdHigh); 
-		        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	
-		        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
-		        	
-		        	int idxRAM = -1;
-
-		        	for (int i = 0; i < ADRAM.length; i++) {
-		        	    if (ADRAM[i] == Ad) {
-		        	        idxRAM = i;
-		        	        break;
-		        	    }
-		        	}
-		        	Xhigh = (X >> 8) & 0xFF;
-		        	Xlow  = X & 0xFF;
-
-		        	if (idxRAM != -1) {
-		        		if(idxRAM<200)
-		        		valram[idxRAM]=Xhigh;
-		        		else {}
-		        		
-		        		if((idxRAM+1)<200)
-		        		valram[idxRAM+1]=Xlow;
-		        		else {}
-		        	}
-
-		            res = toSignedByte(X , 1);
-		            
-		            flags[0]=CheckParity(res);
-		        	flags[4]=CheckSigne(res);
-		        	flags[5]=CheckZero(res);
-		        	flags[7]=0;
-		        	
-		        	CCR.add(flags.clone());
-		        	Valram.add(valram.clone());
-		            valeursA.add(toSignedByte(A , 1)); 
-		            valeursB.add(toSignedByte(B , 1));
-		            valeursS.add(toSignedByte(S , 2));
-		            valeursY.add(toSignedByte(Y , 2));
-		            valeursX.add(toSignedByte(X , 2));
-		            valeursU.add(toSignedByte(U , 2));
-		        }
-		        else if (P1[k].equalsIgnoreCase("STY")) {
-		        	res = 0;
-		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
-		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
-		        	String Ad1 = "";
-		        	if(AdLow<16) {
-		        		Ad1 = Integer.toHexString(AdHigh);
-		        		Ad1 += "0";
-			        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	else {
-		        	Ad1 = Integer.toHexString(AdHigh); 
-		        	Ad1 +=  Integer.toHexString(AdLow);
-		        	}
-		        	
-		        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
-		        	
-		        	int idxRAM = -1;
-
-		        	for (int i = 0; i < ADRAM.length; i++) {
-		        	    if (ADRAM[i] == Ad) {
-		        	        idxRAM = i;
-		        	        break;
-		        	    }
-		        	}
-		        	Yhigh = (Y >> 8) & 0xFF;
-		        	Ylow  = Y & 0xFF;
-
-		        	if (idxRAM != -1) {
-		        		if(idxRAM<200)
-		        		valram[idxRAM]=Yhigh;
-		        		else {}
-		        		
-		        		if((idxRAM+1)<200)
-		        		valram[idxRAM+1]=Ylow;
-		        		else {}
-		        	}
-
-		            res = toSignedByte(Y , 1);
-		            
-		            flags[0]=CheckParity(res);
-		        	flags[4]=CheckSigne(res);
-		        	flags[5]=CheckZero(res);
-		        	flags[7]=0;
-		        	
-		        	CCR.add(flags.clone());
-		        	Valram.add(valram.clone());
-		            valeursA.add(toSignedByte(A , 1)); 
-		            valeursB.add(toSignedByte(B , 1));
-		            valeursS.add(toSignedByte(S , 2));
-		            valeursY.add(toSignedByte(Y , 2));
-		            valeursX.add(toSignedByte(X , 2));
-		            valeursU.add(toSignedByte(U , 2));
 		        }
 		        else if (P1[k].equalsIgnoreCase("PSHS")) {
 	        		entry1 = ValueROM[Temp - 1];
@@ -1995,6 +1252,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2061,12 +1319,317 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 		    		
 		    	}
+		        else {};
+	    	}
+		        if (OTH_INS.equalsIgnoreCase("TFRA,B"))
+		        {
+		        	B = A;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRB,A"))
+		        {
+		        	A = B;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        if (OTH_INS.equalsIgnoreCase("TFRA,DP"))
+		        {
+		        	DP = A;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRDP,A"))
+		        {
+		        	A = DP;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        if (OTH_INS.equalsIgnoreCase("TFRDP,B"))
+		        {
+		        	B = DP;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRB,DP"))
+		        {
+		        	DP = B;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRS,U"))
+		        {
+		        	U = S;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRS,X"))
+		        {
+		        	X = S;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRS,Y"))
+		        {
+		        	Y = S;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRS,D"))
+		        {
+		        	D = S;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRU,S"))
+		        {
+		        	S = U;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRU,X"))
+		        {
+		        	X = U;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRU,Y"))
+		        {
+		        	Y = U;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRU,D"))
+		        {
+		        	D = U;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRX,S"))
+		        {
+		        	S = X;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRX,U"))
+		        {
+		        	S = X;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRX,Y"))
+		        {
+		        	Y = X;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRX,D"))
+		        {
+		        	D = X;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRY,S"))
+		        {
+		        	S = Y;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRY,U"))
+		        {
+		        	U = Y;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRY,X"))
+		        {
+		        	X = Y;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRY,D"))
+		        {
+		        	D = Y;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRD,S"))
+		        {
+		        	S = D;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRD,U"))
+		        {
+		        	U = D;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRD,X"))
+		        {
+		        	X = D;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("TFRD,Y"))
+		        {
+		        	Y = D;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+	        
+	        	//EXG****************************************
+	        
+		        else if (OTH_INS.equalsIgnoreCase("EXGA,B"))
+		        {
+		        	int tmp = A; A = B; B = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGB,A"))
+		        {
+		        	int tmp = A; A = B; B = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGA,DP"))
+		        {
+		        	int tmp = A; A = DP; DP = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGDP,A"))
+		        {
+		        	int tmp = A; A = DP; DP = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGDP,B"))
+		        {
+		        	int tmp = DP; DP = B; B = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGB,DP"))
+		        {
+		        	int tmp = DP; DP = B; B = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGS,U"))
+		        {
+		        	int tmp = S; S = U; U = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGS,X"))
+		        {
+		        	int tmp = S; S = X; X = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGS,Y"))
+		        {
+		        	int tmp = S; S = Y; Y = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGS,D"))
+		        {
+		        	int tmp = S; S = D; D = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGU,S"))
+		        {
+		        	int tmp = U; U = S; S = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGU,X"))
+		        {
+		        	int tmp = U; U = X; X = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGU,Y"))
+		        {
+		        	int tmp = U; U = Y; Y = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGU,D"))
+		        {
+		        	int tmp = U; U = D; D = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGX,S"))
+		        {
+		        	int tmp = X; X = S; S = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGX,U"))
+		        {
+		        	int tmp = X; X = U; U = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGX,Y"))
+		        {
+		        	int tmp = X; X = Y; Y = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGX,D"))
+		        {
+		        	int tmp = X; X = D; D = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGY,S"))
+		        {
+		        	int tmp = Y; Y = S; S = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGY,U"))
+		        {
+		        	int tmp = Y; Y = U; U = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGY,X"))
+		        {
+		        	int tmp = Y; Y = X; X = tmp;
+		        	Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGY,D"))
+		        {
+		        	int tmp = Y; Y = D; D = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGD,S"))
+		        {
+		        	int tmp = D; D = S; S = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGD,U"))
+		        {
+		        	int tmp = D; D = U; U = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGD,X"))
+		        {
+		        	int tmp = D; D = X; X = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        else if (OTH_INS.equalsIgnoreCase("EXGD,Y"))
+		        {
+		        	int tmp = D; D = Y; Y = tmp;
+		        	int D_ABhigh = (D >> 8) & 0xFF;
+		            int D_ABlow  = D & 0xFF;
+		            A=D_ABhigh;  B=D_ABlow;
+		            Valram.add(valram.clone());CCR.add(flags.clone());valeursA.add(toSignedByte(A , 1));valeursB.add(toSignedByte(B , 1));valeursDP.add(toSignedByte(DP , 1)); valeursS.add(toSignedByte(S , 2));valeursY.add(toSignedByte(Y , 2)); valeursX.add(toSignedByte(X , 2));valeursU.add(toSignedByte(U , 2));
+		        }
+		        
+		 
+		        
 		        else if (OTH_INS.equalsIgnoreCase("ABX"))
 		        {
 		        	X = (X + B) & 0xFFFF;
@@ -2074,6 +1637,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2088,6 +1652,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2102,6 +1667,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2117,6 +1683,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2132,6 +1699,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2147,6 +1715,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2162,6 +1731,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2173,6 +1743,7 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
@@ -2189,12 +1760,389 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(Dhigh , 1)); 
 		            valeursB.add(toSignedByte(Dlow , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDA $"))
+		        
+		        
+		        if(P21[k]=='\0') {      
+			        if (P1[k].equalsIgnoreCase("STA")) {
+		        	res = 0;
+		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+		        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+		        	String Ad1 = "";
+		        	if(AdLow<16) {
+		        		Ad1 = Integer.toHexString(AdHigh);
+		        		Ad1 += "0";
+			        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	else {
+		        	Ad1 = Integer.toHexString(AdHigh); 
+		        	Ad1 +=  Integer.toHexString(AdLow);
+		        	}
+		        	
+		        	Ad = Integer.parseInt(Ad1);
+		        	
+		        	int idxRAM = -1;
+
+		        	for (int i = 0; i < ADRAM.length; i++) {
+		        	    if (ADRAM[i] == Ad) {
+		        	        idxRAM = i;
+		        	        break;
+		        	    }
+		        	}
+
+		        	if (idxRAM != -1) {
+		        		if(idxRAM<200)
+			        		valram[idxRAM]=A;
+			        		else {}
+		        	}
+
+		            res = toSignedByte(A , 1);
+		            
+		            flags[0]=CheckParity(res);
+		        	flags[4]=CheckSigne(res);
+		        	flags[5]=CheckZero(res);
+		        	flags[7]=0;
+		        	
+		        	CCR.add(flags.clone());
+		        	Valram.add(valram.clone());
+		            valeursA.add(toSignedByte(A , 1)); 
+		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
+		            valeursS.add(toSignedByte(S , 2));
+		            valeursY.add(toSignedByte(Y , 2));
+		            valeursX.add(toSignedByte(X , 2));
+		            valeursU.add(toSignedByte(U , 2));
+		        }
+			        else if (P1[k].equalsIgnoreCase("STB")) {
+			        	res = 0;
+			        	AdHigh= toSignedByte(ValueROM[Temp - 2],1)  & 0xFF;
+			        	AdLow = toSignedByte(ValueROM[Temp - 1],1)  & 0xFF;
+			        	String Ad1 = "";
+			        	if(AdLow<16) {
+			        		Ad1 = Integer.toHexString(AdHigh);
+			        		Ad1 += "0";
+				        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	else {
+			        	Ad1 = Integer.toHexString(AdHigh); 
+			        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	
+			        	Ad = Integer.parseInt(Ad1) & 0xFFFF;
+			        	
+			        	int idxRAM = -1;
+			        	
+			        	for (int i = 0; i < ADRAM.length; i++) {
+			        		ADRAM[i]= toSignedByte(ADRAM[i],1) ;
+			        	    if (ADRAM[i] == Ad) {
+			        	        idxRAM = i;
+			        	        break;
+			        	    }
+			        	}
+
+			        	if (idxRAM != -1) {
+			        		if(idxRAM<200)
+				        		valram[idxRAM]=B;
+				        		else {}
+			        	}
+
+			            res = toSignedByte(B , 1);
+			            
+			            flags[0]=CheckParity(res);
+			        	flags[4]=CheckSigne(res);
+			        	flags[5]=CheckZero(res);
+			        	flags[7]=0;
+			        	
+			        	CCR.add(flags.clone());
+			        	Valram.add(valram.clone());
+			            valeursA.add(toSignedByte(A , 1)); 
+			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
+			            valeursS.add(toSignedByte(S , 2));
+			            valeursY.add(toSignedByte(Y , 2));
+			            valeursX.add(toSignedByte(X , 2));
+			            valeursU.add(toSignedByte(U , 2));
+			        }
+			        
+			        else if (P1[k].equalsIgnoreCase("STD")) {
+			        	res = 0;
+			        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+			        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+			        	String Ad1 = "";
+			        	if(AdLow<16) {
+			        		Ad1 = Integer.toHexString(AdHigh);
+			        		Ad1 += "0";
+				        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	else {
+			        	Ad1 = Integer.toHexString(AdHigh); 
+			        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	
+			        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
+			        	
+			        	int idxRAM = -1;
+
+			        	for (int i = 0; i < ADRAM.length; i++) {
+			        	    if (ADRAM[i] == Ad) {
+			        	        idxRAM = i;
+			        	        break;
+			        	    }
+			        	}
+
+			        	if (idxRAM != -1) {
+			        		if(idxRAM<200)
+			        		valram[idxRAM]=A;
+			        		else {}
+			        		
+			        		if((idxRAM+1)<200)
+			        		valram[idxRAM+1]=B;
+			        		else {}
+			        	}
+
+			            res = toSignedByte(D , 1);
+			            
+			            flags[0]=CheckParity(res);
+			        	flags[4]=CheckSigne(res);
+			        	flags[5]=CheckZero(res);
+			        	flags[7]=0;
+			        	
+			        	CCR.add(flags.clone());
+			        	Valram.add(valram.clone());
+			            valeursA.add(toSignedByte(A , 1)); 
+			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
+			            valeursS.add(toSignedByte(S , 2));
+			            valeursY.add(toSignedByte(Y , 2));
+			            valeursX.add(toSignedByte(X , 2));
+			            valeursU.add(toSignedByte(U , 2));
+			        }
+			        else if (P1[k].equalsIgnoreCase("STS")) {
+			        	res = 0;
+			        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+			        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+			        	String Ad1 = "";
+			        	if(AdLow<16) {
+			        		Ad1 = Integer.toHexString(AdHigh);
+			        		Ad1 += "0";
+				        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	else {
+			        	Ad1 = Integer.toHexString(AdHigh); 
+			        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	
+			        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
+			        	
+			        	int idxRAM = -1;
+
+			        	for (int i = 0; i < ADRAM.length; i++) {
+			        	    if (ADRAM[i] == Ad) {
+			        	        idxRAM = i;
+			        	        break;
+			        	    }
+			        	}
+			        	Shigh = (S >> 8) & 0xFF;
+			        	Slow  = S & 0xFF;
+
+			        	if (idxRAM != -1) {
+			        		if(idxRAM<200)
+			        		valram[idxRAM]=Shigh;
+			        		else {}
+			        		
+			        		if((idxRAM+1)<200)
+			        		valram[idxRAM+1]=Slow;
+			        		else {}
+			        	}
+
+			            res = toSignedByte(S , 1);
+			            
+			            flags[0]=CheckParity(res);
+			        	flags[4]=CheckSigne(res);
+			        	flags[5]=CheckZero(res);
+			        	flags[7]=0;
+			        	
+			        	CCR.add(flags.clone());
+			        	Valram.add(valram.clone());
+			            valeursA.add(toSignedByte(A , 1)); 
+			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
+			            valeursS.add(toSignedByte(S , 2));
+			            valeursY.add(toSignedByte(Y , 2));
+			            valeursX.add(toSignedByte(X , 2));
+			            valeursU.add(toSignedByte(U , 2));
+			        }
+			        else if (P1[k].equalsIgnoreCase("STU")) {
+			        	res = 0;
+			        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+			        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+			        	String Ad1 = "";
+			        	if(AdLow<16) {
+			        		Ad1 = Integer.toHexString(AdHigh);
+			        		Ad1 += "0";
+				        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	else {
+			        	Ad1 = Integer.toHexString(AdHigh); 
+			        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	
+			        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
+			        	
+			        	int idxRAM = -1;
+
+			        	for (int i = 0; i < ADRAM.length; i++) {
+			        	    if (ADRAM[i] == Ad) {
+			        	        idxRAM = i;
+			        	        break;
+			        	    }
+			        	}
+			        	Uhigh = (U >> 8) & 0xFF;
+			        	Ulow  = U & 0xFF;
+
+			        	if (idxRAM != -1) {
+			        		if(idxRAM<200)
+			        		valram[idxRAM]=Uhigh;
+			        		else {}
+			        		
+			        		if((idxRAM+1)<200)
+			        		valram[idxRAM+1]=Ulow;
+			        		else {}
+			        	}
+
+			            res = toSignedByte(U , 1);
+			            
+			            flags[0]=CheckParity(res);
+			        	flags[4]=CheckSigne(res);
+			        	flags[5]=CheckZero(res);
+			        	flags[7]=0;
+			        	
+			        	CCR.add(flags.clone());
+			        	Valram.add(valram.clone());
+			            valeursA.add(toSignedByte(A , 1)); 
+			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
+			            valeursS.add(toSignedByte(S , 2));
+			            valeursY.add(toSignedByte(Y , 2));
+			            valeursX.add(toSignedByte(X , 2));
+			            valeursU.add(toSignedByte(U , 2));
+			        }
+			        else if (P1[k].equalsIgnoreCase("STX")) {
+			        	res = 0;
+			        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+			        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+			        	String Ad1 = "";
+			        	if(AdLow<16) {
+			        		Ad1 = Integer.toHexString(AdHigh);
+			        		Ad1 += "0";
+				        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	else {
+			        	Ad1 = Integer.toHexString(AdHigh); 
+			        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	
+			        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
+			        	
+			        	int idxRAM = -1;
+
+			        	for (int i = 0; i < ADRAM.length; i++) {
+			        	    if (ADRAM[i] == Ad) {
+			        	        idxRAM = i;
+			        	        break;
+			        	    }
+			        	}
+			        	Xhigh = (X >> 8) & 0xFF;
+			        	Xlow  = X & 0xFF;
+
+			        	if (idxRAM != -1) {
+			        		if(idxRAM<200)
+			        		valram[idxRAM]=Xhigh;
+			        		else {}
+			        		
+			        		if((idxRAM+1)<200)
+			        		valram[idxRAM+1]=Xlow;
+			        		else {}
+			        	}
+
+			            res = toSignedByte(X , 1);
+			            
+			            flags[0]=CheckParity(res);
+			        	flags[4]=CheckSigne(res);
+			        	flags[5]=CheckZero(res);
+			        	flags[7]=0;
+			        	
+			        	CCR.add(flags.clone());
+			        	Valram.add(valram.clone());
+			            valeursA.add(toSignedByte(A , 1)); 
+			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
+			            valeursS.add(toSignedByte(S , 2));
+			            valeursY.add(toSignedByte(Y , 2));
+			            valeursX.add(toSignedByte(X , 2));
+			            valeursU.add(toSignedByte(U , 2));
+			        }
+			        else if (P1[k].equalsIgnoreCase("STY")) {
+			        	res = 0;
+			        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
+			        	AdLow = ValueROM[Temp - 1]  & 0xFF;
+			        	String Ad1 = "";
+			        	if(AdLow<16) {
+			        		Ad1 = Integer.toHexString(AdHigh);
+			        		Ad1 += "0";
+				        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	else {
+			        	Ad1 = Integer.toHexString(AdHigh); 
+			        	Ad1 +=  Integer.toHexString(AdLow);
+			        	}
+			        	
+			        	Ad = Integer.parseInt(Ad1 , 16) & 0xFFFF;
+			        	
+			        	int idxRAM = -1;
+
+			        	for (int i = 0; i < ADRAM.length; i++) {
+			        	    if (ADRAM[i] == Ad) {
+			        	        idxRAM = i;
+			        	        break;
+			        	    }
+			        	}
+			        	Yhigh = (Y >> 8) & 0xFF;
+			        	Ylow  = Y & 0xFF;
+
+			        	if (idxRAM != -1) {
+			        		if(idxRAM<200)
+			        		valram[idxRAM]=Yhigh;
+			        		else {}
+			        		
+			        		if((idxRAM+1)<200)
+			        		valram[idxRAM+1]=Ylow;
+			        		else {}
+			        	}
+
+			            res = toSignedByte(Y , 1);
+			            
+			            flags[0]=CheckParity(res);
+			        	flags[4]=CheckSigne(res);
+			        	flags[5]=CheckZero(res);
+			        	flags[7]=0;
+			        	
+			        	CCR.add(flags.clone());
+			        	Valram.add(valram.clone());
+			            valeursA.add(toSignedByte(A , 1)); 
+			            valeursB.add(toSignedByte(B , 1));
+			            valeursDP.add(toSignedByte(DP , 1));
+			            valeursS.add(toSignedByte(S , 2));
+			            valeursY.add(toSignedByte(Y , 2));
+			            valeursX.add(toSignedByte(X , 2));
+			            valeursU.add(toSignedByte(U , 2));
+			        }
+		        else if (P1[k].equalsIgnoreCase("LDA"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2238,13 +2186,14 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDB $"))
+		        else if (P1[k].equalsIgnoreCase("LDB"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2288,13 +2237,14 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDS $"))
+		        else if (P1[k].equalsIgnoreCase("LDS"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2356,13 +2306,14 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDU $"))
+		        else if (P1[k].equalsIgnoreCase("LDU"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2424,12 +2375,13 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDX $"))
+		        else if (P1[k].equalsIgnoreCase("LDX"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2491,12 +2443,13 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDY $"))
+		        else if (P1[k].equalsIgnoreCase("LDY"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2558,13 +2511,14 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDD $"))
+		        else if (P1[k].equalsIgnoreCase("LDD"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2626,12 +2580,13 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(Dhigh , 1)); 
 		            valeursB.add(toSignedByte(Dlow , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 		        }
-		        else if (Etendu.equalsIgnoreCase("ADDA $"))
+		        else if (P1[k].equalsIgnoreCase("ADDA"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2675,13 +2630,14 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 
 		        }
-		        else if (Etendu.equalsIgnoreCase("LDB $"))
+		        else if (P1[k].equalsIgnoreCase("ADDB"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2725,13 +2681,14 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(A , 1)); 
 		            valeursB.add(toSignedByte(B , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 
 		        }
-		        else if (Etendu.equalsIgnoreCase("ADDD $"))
+		        else if (P1[k].equalsIgnoreCase("ADDD"))
 		        {
 		        	res = 0;
 		        	AdHigh= ValueROM[Temp - 2]  & 0xFF;
@@ -2809,17 +2766,21 @@ public class UAL {
 		        	Valram.add(valram.clone());
 		            valeursA.add(toSignedByte(Dhigh , 1)); 
 		            valeursB.add(toSignedByte(Dlow , 1));
+		            valeursDP.add(toSignedByte(DP , 1));
 		            valeursS.add(toSignedByte(S , 2));
 		            valeursY.add(toSignedByte(Y , 2));
 		            valeursX.add(toSignedByte(X , 2));
 		            valeursU.add(toSignedByte(U , 2));
 		        }
+		        else
+		        {}
+		    }
 	        
 	        else {}
 	        k++;
 	    }
 
-	    CalculMembers VALEURS = new CalculMembers(valeursA, valeursB ,valeursS , valeursY ,valeursX, valeursU, CCR, Valram);
+	    CalculMembers VALEURS = new CalculMembers(valeursA, valeursB ,valeursS , valeursY ,valeursX, valeursU, valeursDP, CCR, Valram);
 	    
 	   return VALEURS;
 	}

@@ -53,6 +53,7 @@ public class GUIClass {
 	private int stepS=0;
 	private int stepX=0;
 	private int stepY=0;
+	private int stepDP=0;
 	private int stepCCR=0;
 	private int stepRAM=0;
 	ArrayList<String> T1 = new ArrayList<>();
@@ -65,6 +66,7 @@ public class GUIClass {
 	ArrayList<Integer> S_val = new ArrayList<>();
 	ArrayList<Integer> X_val = new ArrayList<>();
 	ArrayList<Integer> Y_val = new ArrayList<>();
+	ArrayList<Integer> DP_val = new ArrayList<>();
 	ArrayList<int[]> RAM_val = new ArrayList<>();
 	ArrayList<int[]> CCR = new ArrayList<>();
 	private int[] PC_val = new int[512];
@@ -183,7 +185,7 @@ public class GUIClass {
 	        	Valeur[i]=Valeur[i].trim();
 	        }
 	        
-	        int P1_NombreOctets [] = ERR.P1_NumberOctets(T1,InstructionName, taille);
+	        int P1_NombreOctets [] = ERR.P1_NumberOctets(T1,InstructionName,AdressageMode, taille);
 			int P22_NombreOctets [] = ERR.P22_NumberOctets(Valeur, taille );
 
 	        //======== Errors =========
@@ -194,7 +196,7 @@ public class GUIClass {
 	            
 	        	
 	        	//======= StockROMValues =======
-	            ValROM = MEM.ValeurROM(T1,InstructionName, Valeur, P1_NombreOctets, P22_NombreOctets, taille);
+	            ValROM = MEM.ValeurROM(T1,InstructionName,AdressageMode, Valeur, P1_NombreOctets, P22_NombreOctets, taille);
 	            DefaultTableModel valrroomm = (DefaultTableModel) ROMtable.getModel();
 	            for (int i = 0; i < ValROM.length; i++) {
 	                String hexVALROM = String.format("%02X", ValROM[i]);
@@ -204,12 +206,13 @@ public class GUIClass {
 	            
 	            PC_val = REG.PC(P1_NombreOctets, P22_NombreOctets, AdROM, taille); 
 	            
-	            UAL.CalculMembers Calc = UAL.Calcule(T1, PC_val , InstructionName, ValROM, AdRAM, P1_NombreOctets, P22_NombreOctets);
+	            UAL.CalculMembers Calc = UAL.Calcule(T1, PC_val , InstructionName, AdressageMode, ValROM, AdRAM, P1_NombreOctets, P22_NombreOctets);
 	            A_val = Calc.A;
 	            B_val = Calc.B;
 	            S_val = Calc.S;
 	            X_val = Calc.X;
 	            Y_val = Calc.Y;
+	            DP_val = Calc.DP;
 	            RAM_val = Calc.Valram;
 	            CCR = Calc.CCR; 
 	            
@@ -219,6 +222,7 @@ public class GUIClass {
 	            stepS = 0;
 	            stepX = 0;
 	            stepY = 0;
+	            stepDP = 0;
 	            stepCCR = 0;
 	            stepRAM = 0;
 	            
@@ -296,6 +300,13 @@ public class GUIClass {
 	        		int idxY = Y_val.size() - 1;
 	        		YTextField.setText(String.format("%04X", Y_val.get(idxY) & 0xFFFF).toUpperCase());
 	        	}
+	        if (DP_val == null || DP_val.size() == 0) {
+	            DPTextField.setText("00");
+	        } 
+	        	else {
+	        		int idxDP = DP_val.size() - 1;
+	        		DPTextField.setText(String.format("%02X", DP_val.get(idxDP) & 0xFF).toUpperCase());
+	        	}
 	        
 	        if (CCR == null || CCR.size() == 0) {
 	            CC1.setText("00");CC2.setText("00");CC3.setText("00");CC4.setText("00");CC5.setText("00");CC6.setText("00");CC7.setText("00");CC8.setText("00");
@@ -355,6 +366,7 @@ public class GUIClass {
 		        int idxS = S_val.size() - 1;
 		        int idxX = X_val.size() - 1;
 		        int idxY = Y_val.size() - 1;
+		        int idxDP = DP_val.size() - 1;
 		        int idxCCR = CCR.size() - 1;
 		        int idxRAM = RAM_val.size() - 1;
 
@@ -364,6 +376,7 @@ public class GUIClass {
 		        stepS++;
 		        stepX++;
 		        stepY++;
+		        stepDP++;
 		        stepCCR++;
 		        stepRAM++;
 		        step++;
@@ -377,10 +390,12 @@ public class GUIClass {
 		        	if (stepS >= S_val.size()) stepS = idxS+1;
 		        	if (stepX >= X_val.size()) stepX = idxX+1;
 		        	if (stepY >= Y_val.size()) stepY = idxY+1;
+		        	if (stepDP >= DP_val.size()) stepDP = idxDP+1;
 		        	if (stepCCR >= CCR.size()) stepCCR = idxCCR+1;
 		        	if (stepRAM >= RAM_val.size()) stepRAM = idxRAM+1;
 		        ATextField.setText(String.format("%02X", A_val.get(stepA-1) & 0xFF).toUpperCase());
 		        BTextField.setText(String.format("%02X", B_val.get(stepB-1) & 0xFF).toUpperCase());
+		        DPTextField.setText(String.format("%02X", DP_val.get(stepDP-1) & 0xFF).toUpperCase());
 		        STextField.setText(String.format("%04X", S_val.get(stepS-1) & 0xFFFF).toUpperCase());
 		        XTextField.setText(String.format("%04X", X_val.get(stepX-1) & 0xFFFF).toUpperCase());
 		        YTextField.setText(String.format("%04X", Y_val.get(stepY-1) & 0xFFFF).toUpperCase());

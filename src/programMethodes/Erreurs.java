@@ -14,6 +14,7 @@ public class Erreurs {
 	String AllInstructionsP1immediat_2_2_octet[] = {"LDS","LDY","CMPY","CMPS","CMPU","CMPD"};
 	String AllCasesTFR_EXG[] = {
 			 "TFRA,B","TFRB,A",
+			 "TFRA,DP","TFRDP,A","TFRDP,B","TFRB,DP",
 			 "TFRS,U","TFRS,X","TFRS,Y","TFRS,D",
 			 "TFRU,S","TFRU,X","TFRU,Y","TFRU,D",
 			 "TFRX,S","TFRX,U","TFRX,Y","TFRX,D",
@@ -21,6 +22,7 @@ public class Erreurs {
 			 "TFRD,S","TFRD,U","TFRD,X","TFRD,Y",
 
 			 "EXGA,B","EXGB,A",
+			 "EXGA,DP","EXGDP,A","EXGDP,B","EXGB,DP",
 			 "EXGS,U","EXGS,X","EXGS,Y","EXGS,D",
 			 "EXGU,S","EXGU,X","EXGU,Y","EXGU,D",
 			 "EXGX,S","EXGX,U","EXGX,Y","EXGX,D",
@@ -294,7 +296,7 @@ public class Erreurs {
 	
 //////////////////////////////////////////////////////////////////////////////////
 	
-	public int[] P1_NumberOctets(ArrayList<String> AA, String P1[]  , int taille )
+	public int[] P1_NumberOctets(ArrayList<String> AA, String P1[], char[] P21  , int taille )
 	   {
 		   int TailleOpCode [] = new int [taille];
 		   int conteur = 0;
@@ -306,7 +308,7 @@ public class Erreurs {
 			   conteur = 0;
 			   
 			   if(P1[k]!=null && !P1[k].isEmpty()) {
-			   S = ERR_DEC.toOpCodeImmediat( P1[k], AA.get(k) );   // supposons S = "86" 'LDA'.
+			   S = ERR_DEC.InstructionIoOpCode( P1[k], P21[k], AA.get(k) );   // supposons S = "86" 'LDA'.
 			   }
 			  //  Convert int to String, then to char array
 		        char[] Temp = S.toCharArray();

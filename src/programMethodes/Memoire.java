@@ -23,7 +23,7 @@ public class Memoire {
 		return ValeurROM;
 	}
 	
-	public int[] ValeurROM(ArrayList<String> AA,String [] P1 , String P22[] , int P1_NumberOctets [] , int P22_NumberOctets [] , int taille ) {
+	public int[] ValeurROM(ArrayList<String> AA,String [] P1, char[] P21 , String P22[] , int P1_NumberOctets [] , int P22_NumberOctets [] , int taille ) {
 		int ValueROM[] = new int [1024];
 		int j = 0;
 		
@@ -35,7 +35,7 @@ public class Memoire {
 			
 			if(P1_NumberOctets [k] == 1)
 			{
-				Y =  MEM_DEC.toOpCodeImmediat(P1[k],AA.get(k));    // LDA ---> 86  donc valeurROM[0] = 86
+				Y =  MEM_DEC.InstructionIoOpCode(P1[k], P21[k],AA.get(k));    // LDA ---> 86  donc valeurROM[0] = 86
 				char Temp [] =Y.toCharArray();
 				Y="";
 				Y += Temp[0];
@@ -47,7 +47,7 @@ public class Memoire {
 		 if (P1_NumberOctets [k] == 2)
 			{
 			 
-				Y = MEM_DEC.toOpCodeImmediat(P1[k],AA.get(k));   // pour LDS , on va avoir X = 10CE 'entier'
+				Y = MEM_DEC.InstructionIoOpCode(P1[k],P21[k],AA.get(k));   // pour LDS , on va avoir X = 10CE 'entier'
 		        char[] Temp = String.valueOf(Y).toCharArray();   // 1 | 0 | C | E
 		        for(int r = 0 ; r<4 ; r+=2)
 		        {
@@ -60,11 +60,13 @@ public class Memoire {
 		        }
 			}
 			//
-			if (P22_NumberOctets [k] == 1)
+		 if (P22_NumberOctets [k] == 1)
 			{
+			 if(P22[k].equals("DP"))
+			 {}
+			 else {
 				ValueROM[j] = MEM_DEC.hexToSignedInt(P22[k]) & 0xFF;        // LDA #$99 donc on va avoir ValeurROM[1] = 99 entier signe.
-				j++;
-				
+				j++;}
 			}
 		 if(P22_NumberOctets [k] == 2)
 			{
