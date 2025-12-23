@@ -62,12 +62,11 @@ public class Memoire {
 			//
 		 if (P22_NumberOctets [k] == 1)
 			{
-			 if(P22[k].equals("DP"))
-			 {}
-			 else {
+			 
 				ValueROM[j] = MEM_DEC.hexToSignedInt(P22[k]) & 0xFF;        // LDA #$99 donc on va avoir ValeurROM[1] = 99 entier signe.
-				j++;}
-			}
+				j++;
+				}
+			
 		 if(P22_NumberOctets [k] == 2)
 			{
 		        char[] Temp = P22[k].toCharArray();  // 1 | 0 | C | E
@@ -85,16 +84,6 @@ public class Memoire {
 		}
 	return ValueROM;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	public int[] AdressRAM() {
 		int[] AdressRAM = new int [1280];

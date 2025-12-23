@@ -3,13 +3,10 @@ package programMethodes;
 public class Decodage {
 
 	public int hexToSignedInt(String hexString) {
-		byte octetSigne = 0x00;
-	   if(hexString.equals("DP"))
-	   {}
-	   else {
+		
 	    int val = Integer.parseInt(hexString, 16);
 	    
-	    octetSigne = (byte) val;}
+	    byte octetSigne = (byte) val;
 	    
 	    return octetSigne;
 	    
@@ -30,7 +27,7 @@ public class Decodage {
     	OTH_INS = OTH_INS.replaceAll("\\s+", "");
     	
 		if(!P1.equals(null)) {
-			if(P21 == '#') {
+if(P21 == '#') {   									//pour Immediat
 		// pour LD : 
 		if(P1.equalsIgnoreCase("LDA"))
 			X = "86";
@@ -90,7 +87,6 @@ public class Decodage {
 			X = "34";
 		else if(P1.equalsIgnoreCase("PSHU"))
 			X = "36";
-		else {}
 		return X;
 	}
 		// pour TFR & EXG :
@@ -99,23 +95,6 @@ public class Decodage {
 		else if(OTH_INS.equalsIgnoreCase("EXGA,B")) 
 		    X = "1E89";
 		
-		else if(OTH_INS.equalsIgnoreCase("EXGA,DP")) 
-		    X = "1E8B";
-		else if(OTH_INS.equalsIgnoreCase("EXGDP,A")) 
-		    X = "1EB8";
-		else if(OTH_INS.equalsIgnoreCase("EXGDP,B")) 
-		    X = "1EB9";
-		else if(OTH_INS.equalsIgnoreCase("EXGB,DP")) 
-		    X = "1E9B";
-		else if(OTH_INS.equalsIgnoreCase("TFRA,DP")) 
-		    X = "1F8B";
-		else if(OTH_INS.equalsIgnoreCase("TFRDP,A")) 
-		    X = "1FB8";
-		else if(OTH_INS.equalsIgnoreCase("TFRDP,B")) 
-		    X = "1FB9";
-		else if(OTH_INS.equalsIgnoreCase("TFRB,DP")) 
-		    X = "1F9B";
-
 		else if(OTH_INS.equalsIgnoreCase("TFRB,A")) 
 		    X = "1F98";
 		else if(OTH_INS.equalsIgnoreCase("EXGB,A")) 
@@ -220,10 +199,29 @@ public class Decodage {
 		    X = "1F02";
 		else if(OTH_INS.equalsIgnoreCase("EXGD,Y")) 
 		    X = "1E02";
-		else {}
+		// pour INHERANT :
+		else if(OTH_INS.equalsIgnoreCase("ABX")) 
+		    X = "3A";
+		else if(OTH_INS.equalsIgnoreCase("CLRA")) 
+		    X = "4F";
+		else if(OTH_INS.equalsIgnoreCase("CLRB")) 
+		    X = "5F";
+		else if(OTH_INS.equalsIgnoreCase("DECA")) 
+		    X = "4A";
+		else if(OTH_INS.equalsIgnoreCase("DECB")) 
+		    X = "5A";
+		else if(OTH_INS.equalsIgnoreCase("INCA")) 
+		    X = "4C";
+		else if(OTH_INS.equalsIgnoreCase("INCB")) 
+		    X = "5C";
+		else if(OTH_INS.equalsIgnoreCase("NOP")) 
+		    X = "12";
+		else if(OTH_INS.equalsIgnoreCase("MUL")) 
+		    X = "3D";
+
 		
-		if( P21 =='>'|| P21 == '\0') {
-			// pour ETENDU :
+if( P21 =='>'|| P21 == '\0')   						 // pour ETENDU :
+		{
 		if(P1.equalsIgnoreCase("STA"))
 			X = "B7";
 		else if(P1.equalsIgnoreCase("STB"))
@@ -260,37 +258,19 @@ public class Decodage {
 		    X = "F3";
 		return X;
 	}
-		if(P21=='<')
+		
+		
+else if( P21=='<' )    										//pour Direct
 		{
-			
-			
-			
-			
+		if(P1.equalsIgnoreCase("LDA"))
+			X = "96";
+		else if(P1.equalsIgnoreCase("LDB"))
+			X = "D6";
+		else if(P1.equalsIgnoreCase("LDD"))
+			X = "DC";
+		return X;
 		}
-			
-		
-		
-		
-		// pour INHERANT :
-		if(OTH_INS.equalsIgnoreCase("ABX")) 
-		    X = "3A";
-		else if(OTH_INS.equalsIgnoreCase("CLRA")) 
-		    X = "4F";
-		else if(OTH_INS.equalsIgnoreCase("CLRB")) 
-		    X = "5F";
-		else if(OTH_INS.equalsIgnoreCase("DECA")) 
-		    X = "4A";
-		else if(OTH_INS.equalsIgnoreCase("DECB")) 
-		    X = "5A";
-		else if(OTH_INS.equalsIgnoreCase("INCA")) 
-		    X = "4C";
-		else if(OTH_INS.equalsIgnoreCase("INCB")) 
-		    X = "5C";
-		else if(OTH_INS.equalsIgnoreCase("NOP")) 
-		    X = "12";
-		else if(OTH_INS.equalsIgnoreCase("MUL")) 
-		    X = "3D";
-		}
+	}
 	return X;
 	}
 }

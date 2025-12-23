@@ -14,7 +14,6 @@ public class Erreurs {
 	String AllInstructionsP1immediat_2_2_octet[] = {"LDS","LDY","CMPY","CMPS","CMPU","CMPD"};
 	String AllCasesTFR_EXG[] = {
 			 "TFRA,B","TFRB,A",
-			 "TFRA,DP","TFRDP,A","TFRDP,B","TFRB,DP",
 			 "TFRS,U","TFRS,X","TFRS,Y","TFRS,D",
 			 "TFRU,S","TFRU,X","TFRU,Y","TFRU,D",
 			 "TFRX,S","TFRX,U","TFRX,Y","TFRX,D",
@@ -22,7 +21,6 @@ public class Erreurs {
 			 "TFRD,S","TFRD,U","TFRD,X","TFRD,Y",
 
 			 "EXGA,B","EXGB,A",
-			 "EXGA,DP","EXGDP,A","EXGDP,B","EXGB,DP",
 			 "EXGS,U","EXGS,X","EXGS,Y","EXGS,D",
 			 "EXGU,S","EXGU,X","EXGU,Y","EXGU,D",
 			 "EXGX,S","EXGX,U","EXGX,Y","EXGX,D",
@@ -32,7 +30,7 @@ public class Erreurs {
 	String STOCK[]= {"STA","STB","STD","STS","STU","STX","STY"};
 	String Inherant[]= {"ABX","CLRA","CLRB","DECA","DECB","INCA","INCB","NOP","MUL"};
 	String Etendu[]= {"LDA","LDB","LDS","LDY","LDD","LDU","LDX","ADDA","ADDB","ADDD"};
-
+	String Direct[]= {"LDA","LDB","LDS","LDY","LDD","LDU","LDX","ADDA","ADDB","ADDD"};
 	
 /////////////////////////////////////////////////////////////////////
 
@@ -47,6 +45,18 @@ public class Erreurs {
 		
 		return false;
 	}
+	public boolean CheckDirect(String P1)
+	{
+		if(P1.equals(null) || P1.equals(""))
+		return false;
+		
+		for(String n : Direct)
+		if(P1.equalsIgnoreCase(n))
+		return true;
+		
+		return false;
+	}
+
 	public boolean CheckInherant(String T)
 	{
 		T = T.replaceAll("\\s+", "");
@@ -147,6 +157,28 @@ public class Erreurs {
 		else
 		return false;
 	}
+	public boolean CheckModeEtendu(char P21)
+	{
+		if(P21 == '\0' || P21 == '>')
+		return true;
+		else
+		return false;
+	}
+	
+	public boolean CheckModeDirect(char P21)
+	{
+		if(P21 == '<')
+		return true;
+		else
+		return false;
+	}
+	public boolean CheckMode(char P21)
+	{
+		if(P21 == '<')
+		return true;
+		else
+		return false;
+	}
 
 /////////////////////////////////////////////////////////////////////
 
@@ -196,7 +228,8 @@ public class Erreurs {
 			 (  (CheckInstructionP1_3_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))  )  ||
 			 (  (CheckInstructionP1_4_octet(P1))&&(CheckModeImmediat(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))  )  ||
 			 (  (CheckInstructionSTOCK(P1))&&(CheckMode$only(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
-			 (  (CheckEtendu(P1))&&(CheckMode$only(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
+			 (  (CheckDirect(P1))&&(CheckModeDirect(P21))&&(isHexadecimal(P22))&&(CheckHexa1octet(P22))&&(CheckSpaces(T))  )  || 
+			 (  (CheckEtendu(P1))&&(CheckModeEtendu(P21))&&(isHexadecimal(P22))&&(CheckHexa2octet(P22))&&(CheckSpaces(T))          )  ||
 			 (  (CheckTFR(T))         )  ||
 			 (  (CheckInherant(T))    )
 		)
@@ -310,7 +343,6 @@ public class Erreurs {
 			   if(P1[k]!=null && !P1[k].isEmpty()) {
 			   S = ERR_DEC.InstructionIoOpCode( P1[k], P21[k], AA.get(k) );   // supposons S = "86" 'LDA'.
 			   }
-			  //  Convert int to String, then to char array
 		        char[] Temp = S.toCharArray();
 		        conteur = Temp.length;
 		        TailleOpCode[k] = conteur / 2;
