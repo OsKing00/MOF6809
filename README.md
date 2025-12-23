@@ -36,9 +36,10 @@ FONCTIONNALITÉS
     - "Execute All" (Tout Exécuter) : Exécute le programme entier en une fois.
     - "Step By Step" (Pas à Pas) : Exécute une instruction à la fois pour le débogage.
 - **Modes d'adressage** :
-    - Immédiat.
+    - Immédiat. 
     - Inhérant.
-    - Etendu:
+    - Etendu.
+    - Direct.
 
 PRÉREQUIS ET CONFIGURATION
 --------------------------
