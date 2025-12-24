@@ -1,197 +1,287 @@
-MOF6809: Une simulation du Microprocesseur Motorola 6809
---------------------------------------------------------
+<div align="center">
 
-PRÉSENTATION DU PROJET
-----------------------
-MOF6809 est un simulateur graphique pour le microprocesseur Motorola 6809
-développé en Java. Il permet aux utilisateurs d'écrire du code Assembleur, de
-le compiler et de l'exécuter soit en continu, soit étape par étape. L'application
-visualise l'état interne du processeur, incluant les registres, les drapeaux
-(CCR), la RAM et la ROM.
+# MOF6809
 
-AUTEURS
--------
-Mohammed ABDELKHALEK
-Mohamed AOULICHAK
-Oussama AIT MENDIL
-Fouad AYYAD
+### Simulateur du Microprocesseur Motorola 6809
 
-Projet Universitaire
+[![Java](https://img.shields.io/badge/Java-8+-007396?style=flat-square&logo=openjdk&logoColor=white)](https://www.java.com/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey?style=flat-square)](/)
+[![License](https://img.shields.io/badge/License-Academic-blue?style=flat-square)](/)
 
-FONCTIONNALITÉS
----------------
-- **Éditeur de Code** : Zone de texte intégrée pour écrire les mnémoniques Assembleur.
-- **Compilateur** : Analyse lexicale et syntaxique pour convertir l'Assembleur en Code Machine.
-- **Mémoire Visuelle** : 
-    - Visualisation de la RAM (Lecture/Écriture).
-    - Visualisation de la ROM (Lecture Seule, stocke le programme compilé).
-- **Tableau de Bord des Registres** : Affichage en temps réel de :
-    - Accumulateurs (A, B, D).
-    - Registres d'Index (X, Y).
-    - Pointeurs de Pile (S, U).
-    - Compteur Ordinal (PC).
-    - Page Directe (DP).
-- **Registre de Condition (CCR)** : Affichage bit par bit des drapeaux (H, N, Z, V, C).
-- **Modes d'Exécution** :
-    - "Execute All" (Tout Exécuter) : Exécute le programme entier en une fois.
-    - "Step By Step" (Pas à Pas) : Exécute une instruction à la fois pour le débogage.
-- **Modes d'adressage** :
-    - Immédiat. 
-    - Inhérant.
-    - Etendu.
-    - Direct.
+---
 
-PRÉREQUIS ET CONFIGURATION
---------------------------
-PRÉREQUIS :
-- Java Development Kit (JDK) 8 ou supérieur.
-- Un IDE Java (Eclipse, IntelliJ, NetBeans) ou une Interface en Ligne de Commande.
+**Application graphique de simulation permettant l'écriture, la compilation et l'exécution de programmes en assembleur 6809 avec visualisation en temps réel des registres et de la mémoire.**
 
-INSTALLATION :
-1. Décompressez le dossier du projet.
-2. Assurez-vous que la structure du code source est maintenue :
-   /src
-     /Main
-     /graphicUserInterface
-     /programMethodes
-3. Note sur les Images : Le code fait référence à des chemins d'images locaux 
-   (ex: "Iconn6809.png", "UAL.png"). Assurez-vous que ces images sont placées 
-   dans le bon répertoire ou mettez à jour les chemins dans 'GUIClass.java' 
-   avant l'exécution.
+[Fonctionnalites](#fonctionnalites) | [Installation](#installation) | [Documentation](#documentation) | [Equipe](#equipe)
 
-COMMENT EXÉCUTER :
-1. Compilez le projet.
-2. Exécutez la classe principale : `Main.MainClass`.
+</div>
 
+---
 
-GUIDE D'UTILISATION
--------------------
-1. Lancez l'application.
-2. Dans la "Fenêtre de Code" (Côté droit), saisissez votre code Assembleur.
-   (Voir "Instructions Supportées" ci-dessous).
-3. Cliquez sur [Compile]. 
-   - En cas de succès, les OpCodes apparaîtront dans le tableau ROM.
-   - Si des erreurs existent, vérifiez la "Zone d'Erreur" en bas à droite.
-4. Cliquez sur [Execute All] pour exécuter le programme immédiatement.
-   OU
-   Cliquez sur [Step By Step] pour voir les registres se mettre à jour ligne par ligne.
-5. Utilisez [Reset] pour remettre les registres à zéro ou [Clear All] pour effacer la zone de code.
+## A propos
 
+MOF6809 est un simulateur educatif du microprocesseur **Motorola 6809**, developpe en Java avec une interface graphique Swing. Ce projet permet aux etudiants et passionnes d'informatique de comprendre le fonctionnement interne d'un processeur 8 bits sans necessiter de materiel physique.
 
-INSTRUCTIONS SUPPORTÉES
------------------------
-Cette version du simulateur se concentre principalement sur le Mode d'Adressage 
-IMMÉDIAT (indiqué par le symbole '#').
+Le Motorola 6809, lance en 1978, est considere comme l'un des processeurs 8 bits les plus avances de son epoque, offrant des caracteristiques habituellement reservees aux architectures 16 bits.
 
-Mnémoniques Supportés :
+---
 
-1. INSTRUCTIONS DE CHARGEMENT (LOAD) :
+## Fonctionnalites
 
-   * LDA  #$xx      (Charger l'Accumulateur A - 8 bits)
-   * LDB  #$xx      (Charger l'Accumulateur B - 8 bits)
-   * LDD  #$xxxx    (Charger le Double Accumulateur D - 16 bits)
-   * LDS  #$xxxx    (Charger le Pointeur de Pile S - 16 bits)
-   * LDU  #$xxxx    (Charger le Pointeur de Pile Utilisateur U - 16 bits)
-   * LDX  #$xxxx    (Charger le Registre d'Index X - 16 bits)
-   * LDY  #$xxxx    (Charger le Registre d'Index Y - 16 bits)
+### Editeur de Code
+- Zone de texte integree pour la saisie de code assembleur
+- Conversion automatique en majuscules
+- Support du mot-cle `END` pour marquer la fin du programme
 
-2. INSTRUCTIONS ARITHMÉTIQUES (ADDITION) :
+### Compilateur
+- Analyse lexicale et syntaxique complete
+- Detection et affichage des erreurs avec numero de ligne
+- Generation du code machine hexadecimal
 
-   * ADDA #$xx      (Ajouter à l'Accumulateur A)
-   * ADDB #$xx      (Ajouter à l'Accumulateur B)
-   * ADDD #$xxxx    (Ajouter au Double Accumulateur D)
+### Simulation Memoire
+| Zone | Plage d'adresses | Taille | Type |
+|------|------------------|--------|------|
+| ROM | `$FC00` - `$FFFF` | 1024 octets | Lecture seule |
+| RAM | `$0000` - `$04FF` | 1280 octets | Lecture/Ecriture |
 
-3. INSTRUCTIONS ARITHMÉTIQUES (SOUSTRACTION) :
+### Registres Simules
+| Registre | Taille | Description |
+|----------|--------|-------------|
+| A | 8 bits | Accumulateur principal |
+| B | 8 bits | Accumulateur secondaire |
+| D | 16 bits | Double accumulateur (A:B) |
+| X | 16 bits | Registre d'index X |
+| Y | 16 bits | Registre d'index Y |
+| S | 16 bits | Pointeur de pile systeme |
+| U | 16 bits | Pointeur de pile utilisateur |
+| PC | 16 bits | Compteur ordinal |
+| DP | 8 bits | Page directe |
+| CCR | 8 bits | Registre de condition |
 
-   * SUBA #$xx      (Soustraire de l'Accumulateur A)
-   * SUBB #$xx      (Soustraire de l'Accumulateur B)
-   * SUBD #$xxxx    (Soustraire du Double Accumulateur D)
+### Drapeaux CCR
+| Bit | Nom | Description |
+|-----|-----|-------------|
+| C | Carry | Retenue sortante |
+| V | Overflow | Depassement signe |
+| Z | Zero | Resultat nul |
+| N | Negative | Resultat negatif |
+| H | Half Carry | Demi-retenue |
 
-4. INSTRUCTIONS LOGIQUES (AND / OR) :
+### Modes d'Execution
+- **Execute All** : Execution complete du programme
+- **Step By Step** : Execution instruction par instruction pour le debogage
 
-   * ANDA #$xx      (ET logique avec l'Accumulateur A)
-   * ANDB #$xx      (ET logique avec l'Accumulateur B)
-   * ORA  #$xx      (OU logique avec l'Accumulateur A)
-   * ORB  #$xx      (OU logique avec l'Accumulateur B)
+---
 
-5. INSTRUCTIONS LOGIQUES (COMPARAISON) :
+## Installation
 
-   * CMPA #$xx      (Comparer avec l'Accumulateur A)
-   * CMPB #$xx      (Comparer avec l'Accumulateur B)
-   * CMPD #$xxxx    (Comparer avec le Double Accumulateur D)
-   * CMPS #$xxxx    (Comparer avec le Pointeur de Pile S)
-   * CMPU #$xxxx    (Comparer avec le Pointeur de Pile U)
-   * CMPX #$xxxx    (Comparer avec le Registre X)
-   * CMPY #$xxxx    (Comparer avec le Registre Y)
+### Prerequis
+- Java Development Kit (JDK) 8 ou superieur
+- IDE Java recommande : Eclipse, IntelliJ IDEA ou NetBeans
 
-6. INSTRUCTIONS DE TRANSFERT (R1 → R2) :
+### Compilation et Execution
 
-   * TFR  R1,R2     (Transférer le contenu d’un registre vers un autre, ex : TFR A,B ; TFR Y,S)
+```bash
+# Cloner le repository
+git clone https://github.com/OsKing00/MOF6809.git
 
-7. INSTRUCTIONS D’ÉCHANGE (R1 ↔ R2) :
+# Acceder au repertoire
+cd MOF6809
 
-   * EXG  R1,R2     (Échanger le contenu de deux registres, ex : EXG A,B ; EXG Y,S)
+# Compiler le projet
+javac -d bin src/Main/*.java src/graphicUserInterface/*.java src/programMethodes/*.java
 
-8. INSTRUCTIONS DE STOCKAGE (REGISTRE → MÉMOIRE) :
+# Executer l'application
+java -cp bin Main.MainClass
+```
 
-   * STA            (Stocker l’Accumulateur A en mémoire)
-   * STB            (Stocker l’Accumulateur B en mémoire)
-   * STD            (Stocker le Double Accumulateur D en mémoire)
-   * STS            (Stocker le Pointeur de Pile S en mémoire)
-   * STU            (Stocker le Pointeur de Pile U en mémoire)
-   * STX            (Stocker le Registre X en mémoire)
-   * STY            (Stocker le Registre Y en mémoire)
+---
 
-9. INSTRUCTIONS PUSH / PULL :
+## Structure du Projet
 
-   * PSHS           (Empiler des registres sur la pile système S)
-   * PSHU           (Empiler des registres sur la pile utilisateur U)
-   * PULS           (Dépiler des registres depuis la pile système S)
-   * PULU           (Dépiler des registres depuis la pile utilisateur U)
+```
+MOF6809/
+|-- src/
+|   |-- module-info.java
+|   |-- Main/
+|   |   +-- MainClass.java              # Point d'entree
+|   |-- graphicUserInterface/
+|   |   +-- GUIClass.java               # Interface graphique (1121 lignes)
+|   +-- programMethodes/
+|       |-- Decodage.java               # Conversion opcodes (281 lignes)
+|       |-- Erreurs.java                # Validation syntaxique (376 lignes)
+|       |-- Instructions.java           # Parsing assembleur (130 lignes)
+|       |-- Memoire.java                # Gestion RAM/ROM (100 lignes)
+|       |-- Registres.java              # Calcul PC (25 lignes)
+|       +-- UAL.java                    # Unite Arithmetique et Logique (2907 lignes)
+|-- resources/
+|   +-- images/
+|       |-- Icon.png
+|       +-- Logo.png
+|-- rapport/
+|   +-- rapport.tex                     # Documentation technique LaTeX
++-- README.md
+```
 
-10. INSTRUCTIONS INHÉRENTES :
+---
 
-    * ABX            (Ajouter B au registre X)
-    * CLRA           (Mettre l’Accumulateur A à zéro)
-    * CLRB           (Mettre l’Accumulateur B à zéro)
-    * DECA           (Décrémenter l’Accumulateur A)
-    * DECB           (Décrémenter l’Accumulateur B)
-    * INCA           (Incrémenter l’Accumulateur A)
-    * INCB           (Incrémenter l’Accumulateur B)
-    * NOP            (Aucune opération)
-    * MUL            (Multiplier A par B, résultat dans D)
+## Documentation
 
+### Modes d'Adressage Supportes
 
-* Note : Les valeurs doivent être au format Hexadécimal (ex: $10, $FF, $10CE).
+| Mode | Symbole | Exemple | Description |
+|------|---------|---------|-------------|
+| Immediat | `#` | `LDA #$99` | Valeur directe dans l'instruction |
+| Direct | `<` | `LDA <$20` | Adresse sur 1 octet (page zero) |
+| Etendu | `>` ou rien | `LDA $1234` | Adresse complete sur 2 octets |
+| Inherent | - | `CLRA` | Pas d'operande |
 
+### Jeu d'Instructions
 
-STRUCTURE DU PROJET
--------------------
-Le code source est organisé en trois paquets principaux :
+#### Instructions de Chargement
+```asm
+LDA  #$xx           ; Charger A avec valeur 8 bits
+LDB  #$xx           ; Charger B avec valeur 8 bits
+LDD  #$xxxx         ; Charger D avec valeur 16 bits
+LDS  #$xxxx         ; Charger S avec valeur 16 bits
+LDU  #$xxxx         ; Charger U avec valeur 16 bits
+LDX  #$xxxx         ; Charger X avec valeur 16 bits
+LDY  #$xxxx         ; Charger Y avec valeur 16 bits
+```
 
-1. package Main
-   - MainClass.java : Le point d'entrée de l'application.
+#### Instructions Arithmetiques
+```asm
+ADDA #$xx           ; A = A + valeur
+ADDB #$xx           ; B = B + valeur
+ADDD #$xxxx         ; D = D + valeur
+SUBA #$xx           ; A = A - valeur
+SUBB #$xx           ; B = B - valeur
+SUBD #$xxxx         ; D = D - valeur
+MUL                 ; D = A x B
+```
 
-2. package graphicUserInterface
-   - GUIClass.java : Gère la JFrame, les JTables, les Boutons et tous les 
-     composants visuels utilisant Java Swing. Gère les entrées utilisateurs 
-     et affiche les résultats.
+#### Instructions Logiques
+```asm
+ANDA #$xx           ; A = A AND valeur
+ANDB #$xx           ; B = B AND valeur
+ORA  #$xx           ; A = A OR valeur
+ORB  #$xx           ; B = B OR valeur
+```
 
-3. package programMethodes
-   - Memoire.java : Simule les tableaux RAM et ROM.
-   - Decodage.java : Gère la conversion Hex vers Int et le mapping des OpCodes.
-   - Instructions.java : Analyse le texte d'entrée (Sépare Mnémonique vs Opérande).
-   - Erreurs.java : Valide la syntaxe et la taille des opérandes avant exécution.
-   - UAL.java : (Unité Arithmétique et Logique) Effectue les calculs et met à 
-     jour les drapeaux CCR (Retenue, Débordement, Zéro, Négatif, etc.).
-   - Registres.java : Gère l'incrémentation du Compteur Ordinal (PC).
+#### Instructions de Comparaison
+```asm
+CMPA #$xx           ; Comparer A avec valeur
+CMPB #$xx           ; Comparer B avec valeur
+CMPD #$xxxx         ; Comparer D avec valeur
+CMPX #$xxxx         ; Comparer X avec valeur
+CMPY #$xxxx         ; Comparer Y avec valeur
+CMPS #$xxxx         ; Comparer S avec valeur
+CMPU #$xxxx         ; Comparer U avec valeur
+```
 
+#### Instructions de Stockage
+```asm
+STA  >$xxxx         ; Stocker A en memoire
+STB  >$xxxx         ; Stocker B en memoire
+STD  >$xxxx         ; Stocker D en memoire
+STS  >$xxxx         ; Stocker S en memoire
+STU  >$xxxx         ; Stocker U en memoire
+STX  >$xxxx         ; Stocker X en memoire
+STY  >$xxxx         ; Stocker Y en memoire
+```
 
-LIMITATIONS
------------
+#### Instructions de Transfert
+```asm
+TFR  A,B            ; Transferer A vers B
+TFR  B,A            ; Transferer B vers A
+EXG  A,B            ; Echanger A et B
+```
 
-En raison des contraintes de temps du projet, ce simulateur supporte actuellement 
-exclusivement le Mode d'Adressage Immédiat. Les modes Direct et Indexé 
-sont structurellement préparés mais pas encore entièrement implémentés dans la 
-logique de l'interface utilisateur.
-----------------------------------------------------------------------------------
+#### Instructions Inherentes
+```asm
+ABX                 ; X = X + B
+CLRA                ; A = 0
+CLRB                ; B = 0
+DECA                ; A = A - 1
+DECB                ; B = B - 1
+INCA                ; A = A + 1
+INCB                ; B = B + 1
+NOP                 ; Aucune operation
+```
+
+#### Instructions de Pile
+```asm
+PSHS                ; Empiler sur pile S
+PSHU                ; Empiler sur pile U
+PULS                ; Depiler de pile S
+PULU                ; Depiler de pile U
+```
+
+### Exemple de Programme
+
+```asm
+LDA  #$10
+LDB  #$20
+ADDA #$05
+TFR  A,B
+MUL
+STD  >$0100
+END
+```
+
+**Explication :**
+1. Charge la valeur `$10` (16) dans A
+2. Charge la valeur `$20` (32) dans B
+3. Ajoute `$05` (5) a A, resultat : A = `$15` (21)
+4. Transfere A vers B, resultat : B = `$15` (21)
+5. Multiplie A par B, resultat : D = `$01C9` (441)
+6. Stocke D a l'adresse `$0100`
+
+---
+
+## Limitations Connues
+
+- Mode d'adressage indexe non implemente
+- Instructions de branchement (BEQ, BNE, BRA) non supportees
+- Pas de gestion des interruptions
+- Jeu d'instructions partiel (environ 40% des 59 instructions du 6809)
+
+---
+
+## Technologies
+
+| Composant | Technologie |
+|-----------|-------------|
+| Langage | Java 8+ |
+| Interface | Java Swing |
+| Architecture | Procedurale / Facade |
+| Documentation | LaTeX |
+
+---
+
+## Equipe
+
+| Membre | Role |
+|--------|------|
+| Mohammed ABDELKHALEK | Developpement |
+| Mohamed AOULICHAK | Developpement |
+| Oussama AIT MENDIL | Developpement |
+| Fouad AYYAD | Developpement |
+
+---
+
+## Licence
+
+Ce projet a ete realise dans un cadre universitaire a des fins educatives.
+
+---
+
+<div align="center">
+
+**Faculte des Sciences et Techniques de Settat**
+
+Universite Hassan Premier
+
+Annee Academique 2024-2025
+
+</div>
