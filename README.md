@@ -282,6 +282,6 @@ Ce projet a ete realise dans un cadre universitaire a des fins educatives.
 
 Universite Hassan Premier
 
-Annee Academique 2024-2025
+Annee Academique 2025-2026
 
 </div>
