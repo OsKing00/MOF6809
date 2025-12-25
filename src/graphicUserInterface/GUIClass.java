@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -76,11 +82,11 @@ public class GUIClass {
 		MOF6809 = new JFrame("MOF6809");
 		BACKGROUNDPanel = new JPanel();
 		LogoLabel = new JLabel();
-		ramPanel = new JPanel();
+		ramPanel = new RoundedPanel();
 		RAM = new JLabel();
 		RAMscrollPane = new JScrollPane();
 		RAMtable = new JTable();
-		romPanel = new JPanel();
+		romPanel = new RoundedPanel();
 		ROM = new JLabel();
 		ROMscrollPane = new JScrollPane();
 		ROMtable = new JTable();
@@ -88,38 +94,38 @@ public class GUIClass {
 		TextCodeArea = new JTextArea();
 		ERRORTextField = new JScrollPane();
 		ERRORArea = new JTextArea();
-		CodeWindow = new JPanel();
+		CodeWindow = new RoundedPanel();
 		CodeWindowTxt = new JLabel();
-		Compile = new JButton();
-		Clear_All = new JButton();
-		Execute_All = new JButton();
-		Step_By_Step = new JButton();
-		Reset = new JButton();
-		PCPanel = new JPanel();
+		Compile = new RoundedButton("Compile");
+		Clear_All = new RoundedButton("Clear All");
+		Execute_All = new RoundedButton("Execute All");
+		Step_By_Step = new RoundedButton("Step By Step");
+		Reset = new RoundedButton("Reset");
+		PCPanel = new RoundedPanel();
 		PC = new JLabel();
-		PCTextField = new JTextField();
-		APanel = new JPanel();
+		PCTextField = new RoundedTextField(4);
+		APanel = new RoundedPanel();
 		A = new JLabel();
-		ATextField = new JTextField();
-		BPanel = new JPanel();
+		ATextField = new RoundedTextField(2);
+		BPanel = new RoundedPanel();
 		B = new JLabel();
-		BTextField = new JTextField();
-		SPanel = new JPanel();
+		BTextField = new RoundedTextField(2);
+		SPanel = new RoundedPanel();
 		S = new JLabel();
-		STextField = new JTextField();
-		DPPanel = new JPanel();
+		STextField = new RoundedTextField(4);
+		DPPanel = new RoundedPanel();
 		DP = new JLabel();
-		DPTextField = new JTextField();
-		UPanel = new JPanel();
+		DPTextField = new RoundedTextField(2);
+		UPanel = new RoundedPanel();
 		U = new JLabel();
-		UTextField = new JTextField();
-		XPanel = new JPanel();
+		UTextField = new RoundedTextField(4);
+		XPanel = new RoundedPanel();
 		X = new JLabel();
-		XTextField = new JTextField();
-		YPanel = new JPanel();
+		XTextField = new RoundedTextField(4);
+		YPanel = new RoundedPanel();
 		Y = new JLabel();
-		YTextField = new JTextField();
-		CCPanel = new JPanel();
+		YTextField = new RoundedTextField(4);
+		CCPanel = new RoundedPanel();
 		CC = new JLabel();
 		CC1 = new JTextField();
 		CC2 = new JTextField();
@@ -129,7 +135,7 @@ public class GUIClass {
 		CC6 = new JTextField();
 		CC7 = new JTextField();
 		CC8 = new JTextField();
-		INSTRTextField = new JTextField();
+		INSTRTextField = new RoundedTextField(10);
 		ALUSymbol = new JLabel();
 		label1 = new JLabel();
 		
@@ -151,6 +157,46 @@ public class GUIClass {
 		CC7.setText("0");
 		CC8.setText("0");
 		
+		Compile.addMouseListener(new MouseAdapter() {
+		    public void mouseEntered(MouseEvent e) {
+		    	Compile.setBackground(new Color(0x487aee));
+		    }
+		    public void mouseExited(MouseEvent e) {
+		    	Compile.setBackground(new Color(0x2c43e4));
+		    }
+		});
+		Clear_All.addMouseListener(new MouseAdapter() {
+		    public void mouseEntered(MouseEvent e) {
+		    	Clear_All.setBackground(new Color(0x487aee));
+		    }
+		    public void mouseExited(MouseEvent e) {
+		    	Clear_All.setBackground(new Color(0x2c43e4));
+		    }
+		});
+		Reset.addMouseListener(new MouseAdapter() {
+		    public void mouseEntered(MouseEvent e) {
+		    	Reset.setBackground(new Color(0x487aee));
+		    }
+		    public void mouseExited(MouseEvent e) {
+		    	Reset.setBackground(new Color(0x2c43e4));
+		    }
+		});
+		Step_By_Step.addMouseListener(new MouseAdapter() {
+		    public void mouseEntered(MouseEvent e) {
+		    	Step_By_Step.setBackground(new Color(0x487aee));
+		    }
+		    public void mouseExited(MouseEvent e) {
+		    	Step_By_Step.setBackground(new Color(0x2c43e4));
+		    }
+		});
+		Execute_All.addMouseListener(new MouseAdapter() {
+		    public void mouseEntered(MouseEvent e) {
+		    	Execute_All.setBackground(new Color(0x487aee));
+		    }
+		    public void mouseExited(MouseEvent e) {
+		    	Execute_All.setBackground(new Color(0x2c43e4));
+		    }
+		});
 		
 		//======= CompileButton ========
 		Compile.addActionListener(e -> {
@@ -309,7 +355,7 @@ public class GUIClass {
 	        	}
 	        
 	        if (CCR == null || CCR.size() == 0) {
-	            CC1.setText("00");CC2.setText("00");CC3.setText("00");CC4.setText("00");CC5.setText("00");CC6.setText("00");CC7.setText("00");CC8.setText("00");
+	            CC1.setText("0");CC2.setText("0");CC3.setText("0");CC4.setText("0");CC5.setText("0");CC6.setText("0");CC7.setText("0");CC8.setText("0");
 	        } 
 	        	else {
 	        		int idxCCR = CCR.size() - 1;
@@ -345,11 +391,12 @@ public class GUIClass {
 	        			}
 	        	}
 	        
-	        int idxPC = Math.min(PC_val.length - 1, last - 1);
-	        if (PC_val != null && PC_val.length > idxPC) {
-	            PCTextField.setText(String.format("%04X", PC_val[idxPC]).toUpperCase());
+	        
+	        if (PC_val == null || last == 0) {
+	        	 PCTextField.setText("0000");
 	        } else {
-	            PCTextField.setText("0000");
+	        	int idxPC = Math.min(PC_val.length - 1, last - 1);
+	        	PCTextField.setText(String.format("%04X", PC_val[idxPC]).toUpperCase());
 	        }
 
 	        INSTRTextField.setText(last-1 >= 0 && last-1 < T1.size() ? T1.get(last-1) : "");
@@ -442,6 +489,7 @@ public class GUIClass {
 			XTextField.setText("0000");
 			YTextField.setText("0000");
 			INSTRTextField.setText(null);
+			ERRORArea.setText(null);
 			CC1.setText("0");
 			CC2.setText("0");
 			CC3.setText("0");
@@ -486,7 +534,7 @@ public class GUIClass {
 
 			//======== BACKGROUNDPanel ========
 			{
-				BACKGROUNDPanel.setBackground(new Color(0xff8d76));
+				BACKGROUNDPanel.setBackground(new Color(0x191a3c));
 				BACKGROUNDPanel.setPreferredSize(new Dimension(1280, 720));
 				BACKGROUNDPanel.setForeground(Color.white);
 				BACKGROUNDPanel.setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
@@ -509,19 +557,19 @@ public class GUIClass {
 
 				//======== ramPanel ========
 				{
-					ramPanel.setBackground(new Color(0xf9745f));
+					ramPanel.setBackground(new Color(0x5a6df0));
 					ramPanel.setBorder(LineBorder.createBlackLineBorder());
 					ramPanel.setLayout(null);
 
 					//---- RAM ----
 					RAM.setText("RAM");
 					RAM.setFont(new Font("Bahnschrift", Font.BOLD, 23));
-					RAM.setForeground(Color.white);
+					RAM.setForeground(Color.WHITE);
 					ramPanel.add(RAM);
 					RAM.setBounds(48, 5, 55, 25);
 				}
 				BACKGROUNDPanel.add(ramPanel);
-				ramPanel.setBounds(35, 170, 150, 32);
+				ramPanel.setBounds(35, 166, 150, 32);
 
 				//======== RAMscrollPane ========
 				{
@@ -576,19 +624,19 @@ public class GUIClass {
 
 				//======== romPanel ========
 				{
-					romPanel.setBackground(new Color(0xf9745f));
+					romPanel.setBackground(new Color(0x5a6df0));
 					romPanel.setBorder(LineBorder.createBlackLineBorder());
 					romPanel.setLayout(null);
 
 					//---- ROM ----
 					ROM.setText("ROM");
 					ROM.setFont(new Font("Bahnschrift", Font.BOLD, 23));
-					ROM.setForeground(Color.white);
+					ROM.setForeground(Color.WHITE);
 					romPanel.add(ROM);
 					ROM.setBounds(48, 5, 55, 25);
 				}
 				BACKGROUNDPanel.add(romPanel);
-				romPanel.setBounds(195, 170, 150, 32);
+				romPanel.setBounds(195, 166, 150, 32);
 
 				//======== ROMscrollPane ========
 				{
@@ -670,7 +718,7 @@ public class GUIClass {
 
 				//======== CodeWindow ========
 				{
-					CodeWindow.setBackground(new Color(0xff8d76));
+					CodeWindow.setBackground(new Color(0x5a6df0));
 					CodeWindow.setBorder(LineBorder.createBlackLineBorder());
 					CodeWindow.setLayout(null);
 
@@ -682,29 +730,29 @@ public class GUIClass {
 					CodeWindowTxt.setBounds(75, 5, 150, 25);
 				}
 				BACKGROUNDPanel.add(CodeWindow);
-				CodeWindow.setBounds(950, 170, 300, 32);
+				CodeWindow.setBounds(950, 164, 300, 32);
 
 				//---- Compile ----
 				Compile.setText("Compile");
-				Compile.setBackground(new Color(0xf9745f));
+				Compile.setBackground(new Color(0x2c43e4));
 				Compile.setBorder(LineBorder.createBlackLineBorder());
 				Compile.setFont(new Font("Bahnschrift", Font.BOLD, 18));
 				Compile.setForeground(Color.white);
 				BACKGROUNDPanel.add(Compile);
-				Compile.setBounds(950, 200, 150, 32);
+				Compile.setBounds(950, 198, 149, 32);
 
 				//---- Clear_All ----
 				Clear_All.setText("Clear All");
-				Clear_All.setBackground(new Color(0xf9745f));
+				Clear_All.setBackground(new Color(0x2c43e4));
 				Clear_All.setBorder(LineBorder.createBlackLineBorder());
 				Clear_All.setFont(new Font("Bahnschrift", Font.BOLD, 18));
 				Clear_All.setForeground(Color.white);
 				BACKGROUNDPanel.add(Clear_All);
-				Clear_All.setBounds(1100, 200, 150, 32);
+				Clear_All.setBounds(1101, 198, 149, 32);
 
 				//---- Execute_All ----
 				Execute_All.setText("Execute All");
-				Execute_All.setBackground(new Color(0xf9745f));
+				Execute_All.setBackground(new Color(0x2c43e4));
 				Execute_All.setBorder(LineBorder.createBlackLineBorder());
 				Execute_All.setFont(new Font("Bahnschrift", Font.BOLD, 18));
 				Execute_All.setForeground(Color.white);
@@ -713,7 +761,7 @@ public class GUIClass {
 
 				//---- Step_By_Step ----
 				Step_By_Step.setText("Step By Step");
-				Step_By_Step.setBackground(new Color(0xf9745f));
+				Step_By_Step.setBackground(new Color(0x2c43e4));
 				Step_By_Step.setBorder(LineBorder.createBlackLineBorder());
 				Step_By_Step.setFont(new Font("Bahnschrift", Font.BOLD, 18));
 				Step_By_Step.setForeground(Color.white);
@@ -722,7 +770,7 @@ public class GUIClass {
 
 				//---- Reset ----
 				Reset.setText("Reset");
-				Reset.setBackground(new Color(0xf9745f));
+				Reset.setBackground(new Color(0x2c43e4));
 				Reset.setBorder(LineBorder.createBlackLineBorder());
 				Reset.setFont(new Font("Bahnschrift", Font.BOLD, 18));
 				Reset.setForeground(Color.white);
@@ -731,7 +779,7 @@ public class GUIClass {
 
 				//======== PCPanel ========
 				{
-					PCPanel.setBackground(new Color(0xff8d76));
+					PCPanel.setBackground(new Color(0x5a6df0));
 					PCPanel.setBorder(LineBorder.createBlackLineBorder());
 					PCPanel.setLayout(null);
 
@@ -756,7 +804,7 @@ public class GUIClass {
 
 				//======== APanel ========
 				{
-					APanel.setBackground(new Color(0xff8d76));
+					APanel.setBackground(new Color(0x5a6df0));
 					APanel.setBorder(LineBorder.createBlackLineBorder());
 					APanel.setLayout(null);
 
@@ -780,7 +828,7 @@ public class GUIClass {
 
 				//======== BPanel ========
 				{
-					BPanel.setBackground(new Color(0xff8d76));
+					BPanel.setBackground(new Color(0x5a6df0));
 					BPanel.setBorder(LineBorder.createBlackLineBorder());
 					BPanel.setLayout(null);
 
@@ -804,7 +852,7 @@ public class GUIClass {
 
 				//======== SPanel ========
 				{
-					SPanel.setBackground(new Color(0xff8d76));
+					SPanel.setBackground(new Color(0x5a6df0));
 					SPanel.setBorder(LineBorder.createBlackLineBorder());
 					SPanel.setLayout(null);
 
@@ -828,7 +876,7 @@ public class GUIClass {
 
 				//======== DPPanel ========
 				{
-					DPPanel.setBackground(new Color(0xff8d76));
+					DPPanel.setBackground(new Color(0x5a6df0));
 					DPPanel.setBorder(LineBorder.createBlackLineBorder());
 					DPPanel.setLayout(null);
 
@@ -852,7 +900,7 @@ public class GUIClass {
 
 				//======== UPanel ========
 				{
-					UPanel.setBackground(new Color(0xff8d76));
+					UPanel.setBackground(new Color(0x5a6df0));
 					UPanel.setBorder(LineBorder.createBlackLineBorder());
 					UPanel.setLayout(null);
 
@@ -876,7 +924,7 @@ public class GUIClass {
 
 				//======== XPanel ========
 				{
-					XPanel.setBackground(new Color(0xff8d76));
+					XPanel.setBackground(new Color(0x5a6df0));
 					XPanel.setBorder(LineBorder.createBlackLineBorder());
 					XPanel.setLayout(null);
 
@@ -900,7 +948,7 @@ public class GUIClass {
 
 				//======== YPanel ========
 				{
-					YPanel.setBackground(new Color(0xff8d76));
+					YPanel.setBackground(new Color(0x5a6df0));
 					YPanel.setBorder(LineBorder.createBlackLineBorder());
 					YPanel.setLayout(null);
 
@@ -924,7 +972,7 @@ public class GUIClass {
 
 				//======== CCPanel ========
 				{
-					CCPanel.setBackground(new Color(0xff8d76));
+					CCPanel.setBackground(new Color(0x5a6df0));
 					CCPanel.setBorder(LineBorder.createBlackLineBorder());
 					CCPanel.setLayout(null);
 
@@ -1113,6 +1161,82 @@ public class GUIClass {
 	private JLabel label1;
 	private JScrollPane ERRORTextField;
 	private JTextArea ERRORArea;
+	
+	public class RoundedButton extends JButton {
+
+	    public RoundedButton(String text) {
+	        super(text);
+	        setFocusPainted(false);
+	        setContentAreaFilled(false);
+	        setBorderPainted(false);
+	        setOpaque(false);
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        Graphics2D g2 = (Graphics2D) g.create();
+	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	                            RenderingHints.VALUE_ANTIALIAS_ON);
+
+	        g2.setColor(getModel().isPressed() ? Color.LIGHT_GRAY : getBackground());
+	        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+	        super.paintComponent(g);
+	        g2.dispose();
+	    }
+	}
+	
+	public class RoundedTextField extends JTextField {
+
+	    private int radius = 15;
+
+	    public RoundedTextField(int columns) {
+	        super(columns);
+	        setOpaque(false);
+	        setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        Graphics2D g2 = (Graphics2D) g.create();
+	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	                            RenderingHints.VALUE_ANTIALIAS_ON);
+
+	        g2.setColor(Color.WHITE);
+	        g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+
+	        super.paintComponent(g);
+	        g2.dispose();
+	    }
+
+	    @Override
+	    protected void paintBorder(Graphics g) {
+	        Graphics2D g2 = (Graphics2D) g.create();
+	        g2.setColor(Color.GRAY);
+	        g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
+	        g2.dispose();
+	    }
+	}
+	
+	class RoundedPanel extends JPanel {
+	    private int radius = 20;
+
+	    public RoundedPanel() {
+	        setOpaque(false);
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        Graphics2D g2 = (Graphics2D) g.create();
+	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	                            RenderingHints.VALUE_ANTIALIAS_ON);
+
+	        g2.setColor(getBackground());
+	        g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+
+	        g2.dispose();
+	    }
+	}
 }
 
 
