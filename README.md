@@ -24,6 +24,7 @@ MOF6809 est un simulateur educatif du microprocesseur **Motorola 6809**, develop
 
 Le Motorola 6809, lance en 1978, est considere comme l'un des processeurs 8 bits les plus avances de son epoque, offrant des caracteristiques habituellement reservees aux architectures 16 bits.
 
+👉 **[Découvrir la présentation interactive du projet](https://presentation-oj5jj9xge-meds-projects-8e562c0f.vercel.app/)**
 ---
 
 ## Fonctionnalites
